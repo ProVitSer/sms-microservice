@@ -1,8 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { SmsStatus } from '../interfaces/sms.enum';
 
-@Schema()
+@Schema({ collection: 'sms' })
 export class Sms {
+  @Prop({ enum: SmsStatus })
+  status: SmsStatus;
+
   @Prop({ type: String })
   clientId: string;
 
@@ -14,6 +18,9 @@ export class Sms {
 
   @Prop({ type: String })
   text: string;
+
+  @Prop({ type: String })
+  result: string;
 
   @Prop({ type: Boolean })
   deleted?: boolean;
