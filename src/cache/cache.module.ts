@@ -8,26 +8,26 @@ import { Configs } from '@app/config/config.interface';
 
 @Global()
 @Module({
-  imports: [
-    NestCacheModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService<Configs, true>) => {
-        const { host, port, username, password } = configService.get('redis');
-        const store = await redisStore({
-          host,
-          port,
-          username,
-          password,
-        });
+    imports: [
+        NestCacheModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService<Configs, true>) => {
+                const { host, port, username, password } = configService.get('redis');
+                const store = await redisStore({
+                    host,
+                    port,
+                    username,
+                    password,
+                });
 
-        return {
-          store: store as unknown as CacheStore,
-        };
-      },
-    }),
-  ],
-  exports: [CacheModule, CacheService],
-  providers: [CacheService],
+                return {
+                    store: store as unknown as CacheStore,
+                };
+            },
+        }),
+    ],
+    exports: [CacheModule, CacheService],
+    providers: [CacheService],
 })
 export class CacheModule {}

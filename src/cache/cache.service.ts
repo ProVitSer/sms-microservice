@@ -7,22 +7,22 @@ import { BaseCacheService } from './interfaces/cache.interfaces';
 
 @Injectable()
 export class CacheService implements BaseCacheService {
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
+    constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
-  public async get<T>(key: string): Promise<T | undefined> {
-    const cacheResult = await this.cacheManager.get(key);
-    if (cacheResult) return cacheResult as T;
-  }
+    public async get<T>(key: string): Promise<T | undefined> {
+        const cacheResult = await this.cacheManager.get(key);
+        if (cacheResult) return cacheResult as T;
+    }
 
-  public async set(key: string, data: string, ttl?: number): Promise<void> {
-    return await this.cacheManager.set(key, data, ttl);
-  }
+    public async set(key: string, data: string, ttl?: number): Promise<void> {
+        return await this.cacheManager.set(key, data, ttl);
+    }
 
-  public async reset(): Promise<void> {
-    return await this.cacheManager.reset();
-  }
+    public async reset(): Promise<void> {
+        return await this.cacheManager.reset();
+    }
 
-  public async del(key: string): Promise<void> {
-    return await this.cacheManager.del(key);
-  }
+    public async del(key: string): Promise<void> {
+        return await this.cacheManager.del(key);
+    }
 }

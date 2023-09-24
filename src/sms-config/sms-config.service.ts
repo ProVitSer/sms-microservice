@@ -6,10 +6,13 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class SmsConfigService implements OnModuleInit {
-  constructor(@InjectModel(SmsConfig.name) private smsConfigModel: Model<SmsConfigDocument>, private readonly cacheService: CacheService) {}
+    constructor(
+        @InjectModel(SmsConfig.name) private smsConfigModel: Model<SmsConfigDocument>,
+        private readonly cacheService: CacheService,
+    ) {}
 
-  async onModuleInit() {
-    const smsConfig = new this.smsConfigModel();
-    await smsConfig.save();
-  }
+    async onModuleInit() {
+        const smsConfig = new this.smsConfigModel();
+        await smsConfig.save();
+    }
 }

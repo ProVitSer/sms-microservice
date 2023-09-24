@@ -21,7 +21,8 @@ module.exports = {
       "error",
       {
         "singleQuote": true,
-        "printWidth": 140
+        "printWidth": 140,
+        "tabWidth": 4
       }
     ],
     '@typescript-eslint/interface-name-prefix': 'off',

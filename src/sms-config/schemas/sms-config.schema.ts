@@ -6,26 +6,26 @@ import { SmsTimeRanges } from './sms-time-ranges.schema';
 
 @Schema({ collection: 'sms-config' })
 export class SmsConfig {
-  @Prop({ type: String, unique: true })
-  clientId: string;
+    @Prop({ type: String, unique: true })
+    clientId: string;
 
-  @Prop()
-  smsProvidersConfig: SmsProviderConfig;
+    @Prop()
+    smsProvidersConfig: SmsProviderConfig;
 
-  @Prop()
-  smsTimeRanges: SmsTimeRanges[];
+    @Prop()
+    smsTimeRanges: SmsTimeRanges[];
 
-  @Prop({ type: String, enum: SmsProviderType })
-  smsProvider: SmsProviderType;
+    @Prop({ type: String, enum: SmsProviderType })
+    smsProvider: SmsProviderType;
 
-  @Prop({ type: Boolean })
-  deleted?: boolean;
+    @Prop({ type: Boolean })
+    deleted?: boolean;
 
-  @Prop({ type: Date, default: Date.now })
-  created?: Date;
+    @Prop({ type: Date, default: Date.now })
+    created?: Date;
 
-  @Prop({ type: Date, default: Date.now })
-  changed?: Date;
+    @Prop({ type: Date, default: Date.now })
+    changed?: Date;
 }
 
 const SmsConfigSchema = SchemaFactory.createForClass(SmsConfig);

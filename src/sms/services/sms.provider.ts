@@ -1,3 +1,3 @@
 export abstract class SmsProvider {
-  protected abstract smsSend(): Promise<any>;
+    protected abstract smsSend(): Promise<any>;
 }
