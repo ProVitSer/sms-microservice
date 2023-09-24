@@ -1,8 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { SmsProviderType } from '../interfaces/sms.-config.enum';
 import { SmsProviderConfig } from './sms-provider-config.schema';
-import { SmsTimeRanges } from './sms-time-ranges.schema';
 
 @Schema({ collection: 'sms-config' })
 export class SmsConfig {
@@ -10,16 +8,10 @@ export class SmsConfig {
     clientId: string;
 
     @Prop()
-    smsProvidersConfig: SmsProviderConfig;
+    smsProviderConfig: SmsProviderConfig;
 
-    @Prop()
-    smsTimeRanges: SmsTimeRanges[];
-
-    @Prop({ type: String, enum: SmsProviderType })
-    smsProvider: SmsProviderType;
-
-    @Prop({ type: Boolean })
-    deleted?: boolean;
+    @Prop({ type: Boolean, default: true })
+    isActive?: boolean;
 
     @Prop({ type: Date, default: Date.now })
     created?: Date;

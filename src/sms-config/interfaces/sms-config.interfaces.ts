@@ -1,3 +1,5 @@
+import { SmsProviderConfig } from '../schemas/sms-provider-config.schema';
+
 export interface SmsAeroConfig {
     email: string;
     api_key: string;
@@ -20,3 +22,10 @@ export interface SmsTimeRanges {
 }
 
 export type SmsProviderConfigs = SmsAeroConfig | SmsConfig | SmscConfig;
+
+export interface SmsClientConfig {
+    clientId: string;
+    smsProviderConfig: SmsProviderConfig;
+    smsTimeRanges: SmsTimeRanges;
+    isActive: boolean;
+}
