@@ -2,6 +2,7 @@ export interface Configs {
     redis: RedisConfig;
     mongo: MongoConfig;
     app: AppConfig;
+    log: LogConfig;
 }
 
 export interface AppConfig {
@@ -23,4 +24,11 @@ export interface RedisConfig {
     port: number;
     keepAlive?: number;
     ttl?: number;
+}
+
+export interface LogConfig {
+    path: string;
+    formatDate: string;
+    mixSize: string;
+    maxFiles: string;
 }

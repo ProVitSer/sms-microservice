@@ -7,6 +7,7 @@ import { getMongoUseFactory } from './config/mongo.config';
 import { SmsConfigModule } from './sms-config/sms-config.module';
 import { CacheModule } from './cache/cache.module';
 import { HttpRequestModule } from './http-request/http.module';
+import { AppLoggerModule } from './app-logger/app-logger.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { HttpRequestModule } from './http-request/http.module';
         SmsConfigModule,
         CacheModule,
         HttpRequestModule,
+        AppLoggerModule,
     ],
     controllers: [],
     providers: [],
