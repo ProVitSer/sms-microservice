@@ -8,7 +8,7 @@ import { SmsConfigModelService } from './sms-config-model.service';
 import { SmsTimeRangesModelService } from './sms-time-ranges-model.service';
 import { SmsTimeRangesConfignDto } from '../dto/sms-time-range-config.dto';
 import { SmsTimeRanges } from '../schemas/sms-time-ranges.schema';
-import { format, parse, isWithinInterval } from 'date-fns';
+import { parse, isWithinInterval } from 'date-fns';
 import AddNewRangeException from '../exceptions/add-new-range.exeption';
 
 @Injectable()

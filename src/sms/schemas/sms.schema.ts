@@ -11,13 +11,13 @@ export class Sms {
     clientId: string;
 
     @Prop({ unique: true })
-    smsId: string;
+    smsId?: string;
 
     @Prop({ type: String })
     number: string;
 
     @Prop({ type: String })
-    text: string;
+    text?: string;
 
     @Prop({ type: String })
     result: string;
