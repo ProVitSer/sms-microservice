@@ -8,6 +8,7 @@ import { SmsConfigModule } from './sms-config/sms-config.module';
 import { CacheModule } from './cache/cache.module';
 import { HttpRequestModule } from './http-request/http.module';
 import { AppLoggerModule } from './app-logger/app-logger.module';
+import { RabbitModule } from './rabbit/rabbit.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { AppLoggerModule } from './app-logger/app-logger.module';
         CacheModule,
         HttpRequestModule,
         AppLoggerModule,
+        RabbitModule,
     ],
     controllers: [],
     providers: [],

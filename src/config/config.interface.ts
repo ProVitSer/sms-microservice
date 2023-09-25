@@ -3,6 +3,7 @@ export interface Configs {
     mongo: MongoConfig;
     app: AppConfig;
     log: LogConfig;
+    rabbitMqUrl: string;
 }
 
 export interface AppConfig {
