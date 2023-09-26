@@ -1,7 +1,8 @@
 import { SmsStatus } from '../interfaces/sms.enum';
 import { SendSmsMsgData } from '../interfaces/sms.interfaces';
+import { Sms } from '../schemas/sms.schema';
 
-export class CancelDataAdapter {
+export class CancelDataAdapter implements Sms {
     public status: SmsStatus;
     public clientId: string;
     public number: string;
