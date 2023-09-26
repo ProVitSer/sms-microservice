@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { Smsc } from './smsc';
+import { SmscService } from './smsc.service';
+import { HttpRequestModule } from '@app/http-request/http.module';
 
 @Module({
-    imports: [ConfigModule],
-    providers: [Smsc],
+    imports: [HttpRequestModule],
+    providers: [Smsc, SmscService],
     exports: [Smsc],
 })
 export class SmscModule {}
