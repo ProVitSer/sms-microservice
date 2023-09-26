@@ -1,6 +1,6 @@
 import { CacheService } from '@app/cache/cache.service';
 import { Injectable } from '@nestjs/common';
-import { SmsMsgData } from '../interfaces/sms.interfaces';
+import { SendSmsMsgData } from '../interfaces/sms.interfaces';
 import { SmsClientConfig, SmsTimeRanges } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { AppLoggerService } from '@app/app-logger/app-logger.service';
 import { CLIENT_CONFIG_ERROR, CLIENT_DEACTIVATE, NOT_SEND_INTERVALS } from '../sms.consts';
@@ -18,7 +18,7 @@ export class SmsService {
         private readonly smsProvider: SmsProviderService,
     ) {}
 
-    public async sendSms(data: SmsMsgData): Promise<void> {
+    public async sendSms(data: SendSmsMsgData): Promise<void> {
         try {
             const clientConfig = await this.getClientConfig(data);
             await this.checkClientConfig(data, clientConfig);
@@ -29,20 +29,25 @@ export class SmsService {
         }
     }
 
-    private async _sendSms(data: SmsMsgData, config: SmsClientConfig) {
+    private async _sendSms(data: SendSmsMsgData, config: SmsClientConfig): Promise<void> {
         const provider = this.smsProvider.getProvider(config.smsProviderConfig.smsProvider);
+
         const result = await provider.sendSms(data, config);
+
         await this.smsModelService.create(result);
     }
 
-    private async getClientConfig(data: SmsMsgData): Promise<SmsClientConfig> {
+    private async getClientConfig(data: SendSmsMsgData): Promise<SmsClientConfig> {
         const clientConf = await this.cacheService.get<SmsClientConfig>(data.clientId);
+
         if (!clientConf) throw new Error(`${CLIENT_CONFIG_ERROR}: ${data.clientId}`);
+
         return clientConf;
     }
 
-    private async checkClientConfig(data: SmsMsgData, config: SmsClientConfig): Promise<void> {
+    private async checkClientConfig(data: SendSmsMsgData, config: SmsClientConfig): Promise<void> {
         if (!this.checkInterval(config)) throw await this.smsModelService.create(new CancelDataAdapter(data, NOT_SEND_INTERVALS));
+
         if (!config.isActive) throw await this.smsModelService.create(new CancelDataAdapter(data, CLIENT_DEACTIVATE));
     }
 

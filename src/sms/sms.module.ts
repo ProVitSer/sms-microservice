@@ -9,6 +9,7 @@ import { SmsRuModule } from './providers/sms-ru/sms-ru.module';
 import { SmsService } from './services/sms.service';
 import { SmsProviderService } from './services/sms-provider.service';
 import { SmsMessagingSubService } from './services/sms-messaging-sub.service';
+import { SmsModelService } from './services/sms-model.service';
 
 @Module({
     imports: [
@@ -19,7 +20,7 @@ import { SmsMessagingSubService } from './services/sms-messaging-sub.service';
         SmsAeroModule,
         SmsRuModule,
     ],
-    providers: [SmsService, SmsProviderService, SmsMessagingSubService],
+    providers: [SmsModelService, SmsService, SmsProviderService, SmsMessagingSubService],
     controllers: [],
 })
 export class SmsModule {}

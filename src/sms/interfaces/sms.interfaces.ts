@@ -1,16 +1,21 @@
 import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
-import { SmsSender } from '../services/sms-sender';
+import { SmsProvider } from '../services/sms.provider';
 
-export interface SmsMsgData {
+export interface SendSmsMsgData {
     clientId: string;
     externalNumber: string;
 }
 
+export interface CheckSmsStatusMsgData {
+    clientId: string;
+    smsId: string;
+}
+
 export interface SmsProviderInterface {
     get provider(): SmsProviders;
-    getProvider(smsProviderType: SmsProviderType): SmsSender;
+    getProvider(smsProviderType: SmsProviderType): SmsProvider;
 }
 
 export type SmsProviders = {
-    [key in SmsProviderType]: SmsSender;
+    [key in SmsProviderType]: SmsProvider;
 };
