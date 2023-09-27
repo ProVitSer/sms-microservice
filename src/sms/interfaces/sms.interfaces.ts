@@ -23,9 +23,11 @@ export type SmsProviders = {
 
 export interface SendSmsResult {
     status: SmsStatus;
+    smsProvider: SmsProviderType;
     clientId: string;
     smsId: string;
     number: string;
     text: string;
     result?: string;
+    checkSmsStatusAttempts?: number;
 }

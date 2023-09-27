@@ -1,11 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { SmsStatus } from '../interfaces/sms.enum';
+import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 
 @Schema({ collection: 'sms' })
 export class Sms {
     @Prop({ enum: SmsStatus })
     status: SmsStatus;
+
+    @Prop({ enum: SmsProviderType })
+    smsProvider: SmsProviderType;
 
     @Prop({ type: String })
     clientId: string;
@@ -21,6 +25,9 @@ export class Sms {
 
     @Prop({ type: String })
     result: string;
+
+    @Prop({ type: Number })
+    checkSmsStatusAttempts?: number;
 
     @Prop({ type: Boolean })
     deleted?: boolean;
