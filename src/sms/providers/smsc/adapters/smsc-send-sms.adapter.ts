@@ -6,7 +6,7 @@ import { SmscSendSmsData } from '../interfaces/smsc.interfaces';
 import { v1 } from 'uuid';
 import { ResponseFormat } from '../interfaces/smsc.enum';
 
-export class SmscDataAdapter extends BaseSendSmsDataAdapter {
+export class SmscSendSmsDataAdapter extends BaseSendSmsDataAdapter {
     private readonly smscConfig: SmscConfig;
     public readonly requestData: SmscSendSmsData;
     public readonly smsId: string;
