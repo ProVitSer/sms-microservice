@@ -1,1 +1,1 @@
-export const MAX_CHECK_SMS_STATUS_ATTEMPTS = 5;
+export const MAX_CHECK_SMS_STATUS_ATTEMPTS = 6;
