@@ -8,8 +8,8 @@ export class ResultSendSmsDataAdapter implements Sms {
     public smsProvider: SmsProviderType;
     public clientId: string;
     public smsId: string;
-    public number: string;
-    public text: string;
+    public externalNumber: string;
+    public smsText: string;
     public result: string;
     public checkSmsStatusAttempts: number;
 
@@ -18,8 +18,8 @@ export class ResultSendSmsDataAdapter implements Sms {
         this.smsProvider = data.smsProvider;
         this.clientId = data.clientId;
         this.smsId = data.smsId;
-        this.number = data.number;
-        this.text = data.text;
+        this.externalNumber = data.externalNumber;
+        this.smsText = data.smsText;
         this.result = data.result || '';
         this.checkSmsStatusAttempts = data.checkSmsStatusAttempts || 0;
     }

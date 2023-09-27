@@ -26,8 +26,8 @@ export interface SendSmsResult {
     smsProvider: SmsProviderType;
     clientId: string;
     smsId: string;
-    number: string;
-    text: string;
+    externalNumber: string;
+    smsText: string;
     result?: string;
     checkSmsStatusAttempts?: number;
 }

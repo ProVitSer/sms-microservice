@@ -18,10 +18,10 @@ export class Sms {
     smsId?: string;
 
     @Prop({ type: String })
-    number: string;
+    externalNumber: string;
 
     @Prop({ type: String })
-    text?: string;
+    smsText?: string;
 
     @Prop({ type: String })
     result: string;
