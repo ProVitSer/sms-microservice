@@ -15,7 +15,7 @@ export class Sms {
     clientId: string;
 
     @Prop({ unique: true })
-    smsId?: string;
+    smsId: string;
 
     @Prop({ type: String })
     externalNumber: string;
@@ -26,7 +26,7 @@ export class Sms {
     @Prop({ type: String })
     result: string;
 
-    @Prop({ type: Number })
+    @Prop({ type: Number, default: 0 })
     checkSmsStatusAttempts?: number;
 
     @Prop({ type: Boolean })

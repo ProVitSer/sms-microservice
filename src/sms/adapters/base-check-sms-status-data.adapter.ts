@@ -1,10 +1,11 @@
-import { CheckSmsStatusMsgData } from '../interfaces/sms.interfaces';
+import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
+import { Sms } from '../schemas/sms.schema';
 
 export class BaseCheckSmsStatusDataAdapter {
-    public readonly clientId: string;
-    public readonly smsId: string;
-    constructor(private data: CheckSmsStatusMsgData) {
-        this.clientId = this.data.clientId;
-        this.smsId = this.data.smsId;
+    public readonly clientConfig: SmsClientConfig;
+    public readonly smsData: Sms;
+    constructor(smsData: Sms, clientConfig: SmsClientConfig) {
+        this.clientConfig = clientConfig;
+        this.smsData = smsData;
     }
 }

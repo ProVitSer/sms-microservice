@@ -21,13 +21,13 @@ export type SmsProviders = {
     [key in SmsProviderType]: SmsProvider;
 };
 
-export interface SendSmsResult {
+export interface SmsResult {
     status: SmsStatus;
     smsProvider: SmsProviderType;
     clientId: string;
     smsId: string;
     externalNumber: string;
     smsText: string;
-    result?: string;
+    result: string;
     checkSmsStatusAttempts?: number;
 }
