@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SmsRu extends SmsProvider {
-    protected checkSmsStatus(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<ResultSendSmsDataAdapter> {
+    protected checkStatus(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<ResultSendSmsDataAdapter> {
         throw new Error('Method not implemented.');
     }
     protected getSmsDataAdapter(data: SendSmsMsgData, config: SmsClientConfig): Promise<BaseSendSmsDataAdapter> {

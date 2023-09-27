@@ -7,12 +7,20 @@ import { BaseCheckSmsStatusDataAdapter } from '../adapters/base-check-sms-status
 export abstract class SmsProvider {
     protected abstract getSmsDataAdapter(data: SendSmsMsgData, config: SmsClientConfig): Promise<BaseSendSmsDataAdapter>;
     protected abstract send(dataAdapter: BaseSendSmsDataAdapter): Promise<ResultSendSmsDataAdapter>;
-    protected abstract checkSmsStatus(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<ResultSendSmsDataAdapter>;
+    protected abstract checkStatus(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<ResultSendSmsDataAdapter>;
 
     public async sendSms(data: SendSmsMsgData, config: SmsClientConfig): Promise<ResultSendSmsDataAdapter> {
         try {
             const dataAdapter = await this.getSmsDataAdapter(data, config);
             return await this.send(dataAdapter);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    public async checkSmsStatus(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<ResultSendSmsDataAdapter> {
+        try {
+            return await this.checkStatus(dataAdapter);
         } catch (e) {
             throw e;
         }

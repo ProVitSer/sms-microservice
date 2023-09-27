@@ -8,6 +8,9 @@ import { parse, isWithinInterval, format } from 'date-fns';
 import { SmsModelService } from './sms-model.service';
 import { CancelDataAdapter } from '../adapters/cancel-data.adapter';
 import { SmsProviderService } from './sms-provider.service';
+import { Sms } from '../schemas/sms.schema';
+import { BaseCheckSmsStatusDataAdapter } from '../adapters/base-check-sms-status-data.adapter';
+import { ResultSendSmsDataAdapter } from '../adapters/result-send-sms-data.adapter';
 
 @Injectable()
 export class SmsService {
@@ -23,6 +26,19 @@ export class SmsService {
             const clientConfig = await this.getClientConfig(data);
             await this.checkClientConfig(data, clientConfig);
             await this._sendSms(data, clientConfig);
+        } catch (e) {
+            this.log.error(e);
+            throw e;
+        }
+    }
+
+    public async getSmsStatus(smsData: Sms): Promise<ResultSendSmsDataAdapter> {
+        try {
+            const clientConfig = await this.getClientConfig({ clientId: smsData.clientId, externalNumber: smsData.externalNumber });
+
+            const provider = this.smsProvider.getProvider(clientConfig.smsProviderConfig.smsProvider);
+
+            return await provider.checkSmsStatus(new BaseCheckSmsStatusDataAdapter(smsData, clientConfig));
         } catch (e) {
             this.log.error(e);
             throw e;
@@ -46,9 +62,9 @@ export class SmsService {
     }
 
     private async checkClientConfig(data: SendSmsMsgData, config: SmsClientConfig): Promise<void> {
-        if (!this.checkInterval(config)) throw await this.smsModelService.create(new CancelDataAdapter(data, NOT_SEND_INTERVALS));
+        if (!this.checkInterval(config)) throw await this.smsModelService.create(new CancelDataAdapter(data, config, NOT_SEND_INTERVALS));
 
-        if (!config.isActive) throw await this.smsModelService.create(new CancelDataAdapter(data, CLIENT_DEACTIVATE));
+        if (!config.isActive) throw await this.smsModelService.create(new CancelDataAdapter(data, config, CLIENT_DEACTIVATE));
     }
 
     private checkInterval(config: SmsClientConfig): boolean {
