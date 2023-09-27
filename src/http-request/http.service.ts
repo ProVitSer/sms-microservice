@@ -17,7 +17,22 @@ export class HttpRequestService {
                     }),
                 ),
             );
-            return response as D;
+            return response.data as D;
+        } catch (e) {
+            return e;
+        }
+    }
+
+    public async get<T>(url: string, requestConfig: HttpRequestConfigInterface): Promise<T> {
+        try {
+            const response = await firstValueFrom(
+                this.httpService.get(url, requestConfig.customRequestConfig).pipe(
+                    catchError((error: AxiosError) => {
+                        throw error;
+                    }),
+                ),
+            );
+            return response.data as T;
         } catch (e) {
             return e;
         }

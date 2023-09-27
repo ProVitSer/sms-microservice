@@ -5,6 +5,6 @@ export interface HttpRequestDataInterface<T> {
 }
 
 export interface HttpRequestConfigInterface {
-    url: string;
+    url?: string;
     customRequestConfig: AxiosRequestConfig;
 }
