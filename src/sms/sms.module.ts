@@ -10,17 +10,21 @@ import { SmsService } from './services/sms.service';
 import { SmsProviderService } from './services/sms-provider.service';
 import { SmsMessagingSubService } from './services/sms-messaging-sub.service';
 import { SmsModelService } from './services/sms-model.service';
+import { CheckSmscSmsStatus } from './providers/smsc/schedule/check-smsc-sms-status.schedule';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
         ConfigModule,
         MongooseModule.forFeature([{ name: Sms.name, schema: SmsSchema }]),
+        ScheduleModule.forRoot(),
         RabbitModule,
         SmscModule,
         SmsAeroModule,
         SmsRuModule,
     ],
-    providers: [SmsModelService, SmsService, SmsProviderService, SmsMessagingSubService],
+    providers: [SmsModelService, SmsService, SmsProviderService, SmsMessagingSubService, CheckSmscSmsStatus],
+    exports: [SmsModelService],
     controllers: [],
 })
 export class SmsModule {}
