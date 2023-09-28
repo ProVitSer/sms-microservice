@@ -10,6 +10,9 @@ export class SmsConfig {
     @Prop()
     smsProviderConfig: SmsProviderConfig;
 
+    @Prop({ type: [String] })
+    senders: string[];
+
     @Prop({ type: Boolean, default: true })
     isActive?: boolean;
 

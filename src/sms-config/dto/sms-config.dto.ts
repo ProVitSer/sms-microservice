@@ -1,4 +1,4 @@
-import { IsDefined, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsDefined, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { SmsProviderType } from '../interfaces/sms.-config.enum';
 
 export class SmsProviderConfigDto {
@@ -33,4 +33,8 @@ export class SmsConfignDto {
 
     @IsDefined()
     smsProviderConfig: SmsProviderConfigDto;
+
+    @IsArray()
+    @IsNotEmpty()
+    senders: string[];
 }
