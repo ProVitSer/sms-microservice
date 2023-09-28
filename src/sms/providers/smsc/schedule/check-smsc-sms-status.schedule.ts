@@ -17,7 +17,7 @@ export class CheckSmscSmsStatus {
         private readonly log: AppLoggerService,
     ) {}
 
-    @Cron(CronExpression.EVERY_MINUTE)
+    @Cron(CronExpression.EVERY_10_SECONDS)
     async checkSmsStatus(): Promise<void> {
         try {
             const smscSms = await this.smsModelService.find({
