@@ -1,7 +1,7 @@
 import { SmsStatus } from '@app/sms/interfaces/sms.enum';
 import { CheckSmsStatusResponse } from '../interfaces/smsc.interfaces';
 import { SmsResult } from '@app/sms/interfaces/sms.interfaces';
-import { SMSC_ERROR_CODE_DESCRIPTION, SMSC_STATUS_DESCRIPTION, SMSC_STATUS_TO_SMS_STATUS } from '../smsс.consts';
+import { SMSC_ERROR_CODE_DESCRIPTION, SMSC_STATUS_DESCRIPTION, SMSC_STATUS_TO_SMS_STATUS } from '../smsc.consts';
 import { BaseCheckSmsStatusDataAdapter } from '@app/sms/adapters/base-check-sms-status-data.adapter';
 
 export class SmscCheckStatusResultAdapter {
@@ -19,6 +19,8 @@ export class SmscCheckStatusResultAdapter {
             smsId: this.smscData.smsData.smsId,
             externalNumber: this.smscData.smsData.externalNumber,
             smsText: this.smscData.smsData.smsText,
+            sender: this.smscData.smsData.sender,
+            smsSendType: this.smscData.smsData.smsSendType,
         };
     }
 

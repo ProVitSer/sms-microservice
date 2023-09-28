@@ -1,13 +1,14 @@
 import { SmsStatus } from '@app/sms/interfaces/sms.enum';
-import { SendSmsResponse, SmscData } from '../interfaces/smsc.interfaces';
+import { SendSmsResponse } from '../interfaces/smsc.interfaces';
 import { SmsResult } from '@app/sms/interfaces/sms.interfaces';
-import { SMSC_ERROR_CODE_DESCRIPTION, SMSC_STATUS_DESCRIPTION } from '../smsс.consts';
 import { SmscStatus } from '../interfaces/smsc.enum';
 import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
+import { SmscSendSmsDataAdapter } from './smsc-send-sms.adapter';
+import { SMSC_ERROR_CODE_DESCRIPTION, SMSC_STATUS_DESCRIPTION } from '../smsc.consts';
 
 export class SmscResultSendAdapter {
     public data: SmsResult;
-    constructor(private smscData: SmscData, private result: SendSmsResponse) {
+    constructor(private smsData: SmscSendSmsDataAdapter, private result: SendSmsResponse) {
         this.data = this.formatResultData();
     }
 
@@ -16,10 +17,12 @@ export class SmscResultSendAdapter {
         return {
             ...resultStatusInfo,
             smsProvider: SmsProviderType.smsc,
-            clientId: this.smscData.clientId,
-            smsId: this.smscData.smsId,
-            externalNumber: this.smscData.externalNumber,
-            smsText: this.smscData.smsText,
+            clientId: this.smsData.dataAdapter.clientId,
+            smsId: this.smsData.smsId,
+            externalNumber: this.smsData.dataAdapter.externalNumber,
+            smsText: this.smsData.dataAdapter.smsText,
+            sender: this.smsData.dataAdapter.sender,
+            smsSendType: this.smsData.dataAdapter.smsSendType,
         };
     }
 
