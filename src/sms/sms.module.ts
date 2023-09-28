@@ -12,6 +12,7 @@ import { SmsMessagingSubService } from './services/sms-messaging-sub.service';
 import { SmsModelService } from './services/sms-model.service';
 import { CheckSmscSmsStatus } from './providers/smsc/schedule/check-smsc-sms-status.schedule';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SmsController } from './controllers/sms.controller';
 
 @Module({
     imports: [
@@ -25,6 +26,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     ],
     providers: [SmsModelService, SmsService, SmsProviderService, SmsMessagingSubService, CheckSmscSmsStatus],
     exports: [SmsModelService],
-    controllers: [],
+    controllers: [SmsController],
 })
 export class SmsModule {}
