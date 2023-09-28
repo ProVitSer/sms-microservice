@@ -1,5 +1,5 @@
 import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
-import { SmsStatus } from '../interfaces/sms.enum';
+import { SmsSendType, SmsStatus } from '../interfaces/sms.enum';
 import { SmsResult } from '../interfaces/sms.interfaces';
 import { Sms } from '../schemas/sms.schema';
 import { v1 } from 'uuid';
@@ -12,6 +12,8 @@ export class ResultSendSmsDataAdapter implements Sms {
     public externalNumber: string;
     public smsText: string;
     public result: string;
+    public sender: string;
+    public smsSendType: SmsSendType;
 
     constructor(data: SmsResult) {
         this.status = data.status;
@@ -21,5 +23,7 @@ export class ResultSendSmsDataAdapter implements Sms {
         this.externalNumber = data.externalNumber;
         this.smsText = data.smsText;
         this.result = data.result || '';
+        this.sender = data.sender;
+        this.smsSendType = data.smsSendType;
     }
 }

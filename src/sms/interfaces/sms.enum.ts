@@ -5,3 +5,9 @@ export enum SmsStatus {
     completed = 'completed',
     cancel = 'cancel',
 }
+
+export enum SmsSendType {
+    api = 'api',
+    pbxEvent = 'pbxEvent',
+    massSending = 'massSending',
+}

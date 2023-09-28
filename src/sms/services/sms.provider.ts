@@ -1,17 +1,16 @@
-import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { BaseSendSmsDataAdapter } from '../adapters/base-send-sms-data.adapter';
-import { SendSmsMsgData } from '../interfaces/sms.interfaces';
 import { ResultSendSmsDataAdapter } from '../adapters/result-send-sms-data.adapter';
 import { BaseCheckSmsStatusDataAdapter } from '../adapters/base-check-sms-status-data.adapter';
+import { BaseSendApiSmsDataAdapter } from '../adapters/base-send-api-sms-data.asapter';
 
 export abstract class SmsProvider {
-    protected abstract getSmsDataAdapter(data: SendSmsMsgData, config: SmsClientConfig): Promise<BaseSendSmsDataAdapter>;
     protected abstract send(dataAdapter: BaseSendSmsDataAdapter): Promise<ResultSendSmsDataAdapter>;
     protected abstract checkStatus(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<ResultSendSmsDataAdapter>;
+    protected abstract apiSend(dataAdapter: BaseSendApiSmsDataAdapter): Promise<ResultSendSmsDataAdapter>;
+    // protected abstract massSmsSending(): Promise<any>;
 
-    public async sendSms(data: SendSmsMsgData, config: SmsClientConfig): Promise<ResultSendSmsDataAdapter> {
+    public async sendSms(dataAdapter: BaseSendSmsDataAdapter): Promise<ResultSendSmsDataAdapter> {
         try {
-            const dataAdapter = await this.getSmsDataAdapter(data, config);
             return await this.send(dataAdapter);
         } catch (e) {
             throw e;
@@ -21,6 +20,14 @@ export abstract class SmsProvider {
     public async checkSmsStatus(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<ResultSendSmsDataAdapter> {
         try {
             return await this.checkStatus(dataAdapter);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    public async sendApiSms(data: BaseSendApiSmsDataAdapter): Promise<ResultSendSmsDataAdapter> {
+        try {
+            return await this.apiSend(data);
         } catch (e) {
             throw e;
         }

@@ -11,6 +11,9 @@ import { SmsProviderService } from './sms-provider.service';
 import { Sms } from '../schemas/sms.schema';
 import { BaseCheckSmsStatusDataAdapter } from '../adapters/base-check-sms-status-data.adapter';
 import { ResultSendSmsDataAdapter } from '../adapters/result-send-sms-data.adapter';
+import { SendSmsDto } from '../dto/send-sms.dto';
+import { BaseSendApiSmsDataAdapter } from '../adapters/base-send-api-sms-data.asapter';
+import { BaseSendSmsDataAdapter } from '../adapters/base-send-sms-data.adapter';
 
 @Injectable()
 export class SmsService {
@@ -45,10 +48,25 @@ export class SmsService {
         }
     }
 
+    public async sendApiSms(smsData: SendSmsDto): Promise<void> {
+        try {
+            const clientConfig = await this.getClientConfig({ clientId: smsData.clientId, externalNumber: smsData.externalNumber });
+
+            const provider = this.smsProvider.getProvider(clientConfig.smsProviderConfig.smsProvider);
+
+            const result = await provider.sendApiSms(new BaseSendApiSmsDataAdapter(smsData, clientConfig));
+
+            await this.smsModelService.create(result);
+        } catch (e) {
+            this.log.error(e);
+            throw e;
+        }
+    }
+
     private async _sendSms(data: SendSmsMsgData, config: SmsClientConfig): Promise<void> {
         const provider = this.smsProvider.getProvider(config.smsProviderConfig.smsProvider);
 
-        const result = await provider.sendSms(data, config);
+        const result = await provider.sendSms(new BaseSendSmsDataAdapter(data, config));
 
         await this.smsModelService.create(result);
     }
