@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { SmsStatus } from '../interfaces/sms.enum';
+import { SmsSendType, SmsStatus } from '../interfaces/sms.enum';
 import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 
 @Schema({ collection: 'sms' })
@@ -10,6 +10,9 @@ export class Sms {
 
     @Prop({ enum: SmsProviderType })
     smsProvider: SmsProviderType;
+
+    @Prop({ enum: SmsSendType })
+    smsSendType: SmsSendType;
 
     @Prop({ type: String })
     clientId: string;
@@ -21,7 +24,10 @@ export class Sms {
     externalNumber: string;
 
     @Prop({ type: String })
-    smsText?: string;
+    sender: string;
+
+    @Prop({ type: String })
+    smsText: string;
 
     @Prop({ type: String })
     result: string;
