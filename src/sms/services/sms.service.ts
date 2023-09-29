@@ -2,7 +2,7 @@ import { CacheService } from '@app/cache/cache.service';
 import { Injectable } from '@nestjs/common';
 import { SmsClientConfig, SmsTimeRanges } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { AppLoggerService } from '@app/app-logger/app-logger.service';
-import { CLIENT_CONFIG_ERROR, CLIENT_DEACTIVATE, NOT_SEND_INTERVALS } from '../interfaces/sms.consts';
+import { CLIENT_CONFIG_ERROR, CLIENT_DEACTIVATE, NOT_SEND_INTERVALS } from '../sms.consts';
 import { parse, isWithinInterval, format } from 'date-fns';
 import { SmsModelService } from './sms-model.service';
 import { CancelDataAdapter } from '../adapters/cancel-data.adapter';
