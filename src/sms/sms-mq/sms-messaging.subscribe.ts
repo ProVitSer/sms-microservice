@@ -2,10 +2,10 @@ import { RabbitMqExchange, QueueTypes, RoutingKey, Channels } from '@app/rabbit/
 import { RabbitSubscribe, Nack } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
 import { SendSmsMsgData } from '../interfaces/sms.interfaces';
-import { SmsService } from './sms.service';
+import { SmsService } from '../services/sms.service';
 
 @Injectable()
-export class SmsMessagingSubService {
+export class SmsMessagingSubscribe {
     constructor(private readonly smsService: SmsService) {}
 
     @RabbitSubscribe({

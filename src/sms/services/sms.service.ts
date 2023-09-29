@@ -7,7 +7,7 @@ import { CLIENT_CONFIG_ERROR, CLIENT_DEACTIVATE, NOT_SEND_INTERVALS } from '../s
 import { parse, isWithinInterval, format } from 'date-fns';
 import { SmsModelService } from './sms-model.service';
 import { CancelDataAdapter } from '../adapters/cancel-data.adapter';
-import { SmsProviderService } from './sms-provider.service';
+import { SmsProviderService } from '../providers/sms-provider.service';
 import { Sms } from '../schemas/sms.schema';
 import { BaseCheckSmsStatusDataAdapter } from '../adapters/base-check-sms-status-data.adapter';
 import { ResultSendSmsDataAdapter } from '../adapters/result-send-sms-data.adapter';

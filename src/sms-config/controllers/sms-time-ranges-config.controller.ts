@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { SmsConfigService } from '../services/sms-config.service';
-import { UUIDParam } from '../decorators/uuid-param.decorator';
+import { UUIDParam } from '../../decorators/uuid-param.decorator';
 import { SmsTimeRangesConfignDto } from '../dto/sms-time-range-config.dto';
 
 @Controller('sms-time-ranges-config')

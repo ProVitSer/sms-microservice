@@ -1,5 +1,4 @@
 import { ResultSendSmsDataAdapter } from '@app/sms/adapters/result-send-sms-data.adapter';
-import { SmsProvider } from '@app/sms/services/sms.provider';
 import { Injectable } from '@nestjs/common';
 import { SmscSendSmsDataAdapter } from './adapters/smsc-send-sms.adapter';
 import { SmscService } from './smsc.service';
@@ -9,6 +8,7 @@ import { SmscCheckStatusResultAdapter } from './adapters/smsc-check-status-resul
 import { BaseSendApiSmsDataAdapter } from '@app/sms/adapters/base-send-api-sms-data.asapter';
 import { SmscCheckStatusDataAdapter } from './adapters/smsc-check-status-data.adapter';
 import { BaseSendSmsDataAdapter } from '@app/sms/adapters/base-send-sms-data.adapter';
+import { SmsProvider } from '../sms.provider';
 
 @Injectable()
 export class Smsc extends SmsProvider {

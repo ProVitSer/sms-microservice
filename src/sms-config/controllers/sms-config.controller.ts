@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { SmsConfigService } from '../services/sms-config.service';
-import { UUIDParam } from '../decorators/uuid-param.decorator';
+import { UUIDParam } from '../../decorators/uuid-param.decorator';
 import { SmsConfignDto } from '../dto/sms-config.dto';
 import { SmsConfignActivateDto } from '../dto/sms-config-active.dto';
 

@@ -1,6 +1,6 @@
 import type { PipeTransform, Type } from '@nestjs/common';
 import { Param, ParseUUIDPipe } from '@nestjs/common';
-import { UUIDException } from '../exceptions/uuid.exeption';
+import { UUIDException } from '../sms-config/exceptions/uuid.exeption';
 
 const exceptionFactory = () => new UUIDException();
 

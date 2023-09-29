@@ -2,8 +2,8 @@ import { BaseCheckSmsStatusDataAdapter } from '@app/sms/adapters/base-check-sms-
 import { BaseSendApiSmsDataAdapter } from '@app/sms/adapters/base-send-api-sms-data.asapter';
 import { BaseSendSmsDataAdapter } from '@app/sms/adapters/base-send-sms-data.adapter';
 import { ResultSendSmsDataAdapter } from '@app/sms/adapters/result-send-sms-data.adapter';
-import { SmsProvider } from '@app/sms/services/sms.provider';
 import { Injectable } from '@nestjs/common';
+import { SmsProvider } from '../sms.provider';
 
 @Injectable()
 export class SmsRu extends SmsProvider {

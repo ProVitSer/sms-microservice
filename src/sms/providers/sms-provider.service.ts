@@ -1,8 +1,8 @@
 import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 import { SmsProviderInterface, SmsProviders } from '../interfaces/sms.interfaces';
-import { SmsAero } from '../providers/sms-aero/sms-aero';
-import { SmsRu } from '../providers/sms-ru/sms-ru';
-import { Smsc } from '../providers/smsc/smsc';
+import { SmsAero } from './sms-aero/sms-aero';
+import { SmsRu } from './sms-ru/sms-ru';
+import { Smsc } from './smsc/smsc';
 import { PROVIDER_ERROR } from '../sms.consts';
 import { SmsProvider } from './sms.provider';
 import { Injectable } from '@nestjs/common';

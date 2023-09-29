@@ -1,6 +1,6 @@
 import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
-import { SmsProvider } from '../services/sms.provider';
 import { SmsSendType, SmsStatus } from './sms.enum';
+import { SmsProvider } from '../providers/sms.provider';
 
 export interface SendSmsMsgData {
     clientId: string;
