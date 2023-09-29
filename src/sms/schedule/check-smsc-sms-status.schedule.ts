@@ -7,7 +7,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 import { SmsStatus } from '../interfaces/sms.enum';
 import { MAX_CHECK_SMS_STATUS_ATTEMPTS } from '../sms.config';
-import { SMS_STATUS_FAILED } from '../interfaces/sms.consts';
+import { SMS_STATUS_FAILED } from '../sms.consts';
 
 @Injectable()
 export class CheckSmscSmsStatus {
