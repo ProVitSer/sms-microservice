@@ -30,6 +30,7 @@ export class SmsConfigModelService {
     }
 
     public async updateOne(filter: Partial<SmsConfig>, update: Partial<SmsConfig>): Promise<UpdateWriteOpResult> {
+        update.changed = new Date();
         return await this.smsConfigModel.updateOne(filter, update);
     }
 }
