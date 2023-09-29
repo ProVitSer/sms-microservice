@@ -1,13 +1,13 @@
 import { AppLoggerService } from '@app/app-logger/app-logger.service';
-import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
-import { SmsStatus } from '@app/sms/interfaces/sms.enum';
-import { Sms } from '@app/sms/schemas/sms.schema';
+import { Sms } from '@app/sms/sms.schema';
 import { SmsModelService } from '@app/sms/services/sms-model.service';
 import { SmsService } from '@app/sms/services/sms.service';
-import { MAX_CHECK_SMS_STATUS_ATTEMPTS } from '@app/sms/sms.config';
-import { SMS_STATUS_FAILED } from '@app/sms/sms.consts';
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
+import { SmsStatus } from '../interfaces/sms.enum';
+import { MAX_CHECK_SMS_STATUS_ATTEMPTS } from '../sms.config';
+import { SMS_STATUS_FAILED } from '../interfaces/sms.consts';
 
 @Injectable()
 export class CheckSmscSmsStatus {
@@ -22,7 +22,7 @@ export class CheckSmscSmsStatus {
         try {
             const smscSms = await this.smsModelService.find({
                 status: SmsStatus.inProgress,
-                smsProvider: SmsProviderType.smsc,
+                smsProvider: SmsApiProviderType.smsc,
                 checkSmsStatusAttempts: { $lt: MAX_CHECK_SMS_STATUS_ATTEMPTS },
             });
             await this._checkSmsStatus(smscSms);

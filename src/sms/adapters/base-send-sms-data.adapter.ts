@@ -1,9 +1,9 @@
 import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
-import { SendSmsMsgData } from '../interfaces/sms.interfaces';
-import { SmsUtils } from '../sms.utils';
+import { SmsUtils } from '../../utils/sms.utils';
 import { parse, isWithinInterval, format } from 'date-fns';
 import { SmsTimeRanges } from '@app/sms-config/schemas/sms-time-ranges.schema';
 import { SmsSendType } from '../interfaces/sms.enum';
+import { SendSmsMsgData } from '../interfaces/sms.interfaces';
 
 export class BaseSendSmsDataAdapter {
     public readonly clientId: string;

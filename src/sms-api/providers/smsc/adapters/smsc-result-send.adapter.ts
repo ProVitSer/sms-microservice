@@ -1,22 +1,22 @@
-import { SmsStatus } from '@app/sms/interfaces/sms.enum';
 import { SendSmsResponse } from '../interfaces/smsc.interfaces';
-import { SmsResult } from '@app/sms/interfaces/sms.interfaces';
 import { SmscStatus } from '../interfaces/smsc.enum';
-import { SmsProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
+import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 import { SmscSendSmsDataAdapter } from './smsc-send-sms.adapter';
 import { SMSC_ERROR_CODE_DESCRIPTION, SMSC_STATUS_DESCRIPTION } from '../smsc.consts';
+import { SmsStatus } from '@app/sms/interfaces/sms.enum';
+import { SendSmsResult } from '@app/sms-api/interfaces/sms-api.interfaces';
 
 export class SmscResultSendAdapter {
-    public data: SmsResult;
+    public data: SendSmsResult;
     constructor(private smsData: SmscSendSmsDataAdapter, private result: SendSmsResponse) {
         this.data = this.formatResultData();
     }
 
-    private formatResultData(): SmsResult {
+    private formatResultData(): SendSmsResult {
         const resultStatusInfo = 'error_code' in this.result ? this.formatError() : this.inProgress();
         return {
             ...resultStatusInfo,
-            smsProvider: SmsProviderType.smsc,
+            smsApiProviderType: SmsApiProviderType.smsc,
             clientId: this.smsData.dataAdapter.clientId,
             smsId: this.smsData.smsId,
             externalNumber: this.smsData.dataAdapter.externalNumber,

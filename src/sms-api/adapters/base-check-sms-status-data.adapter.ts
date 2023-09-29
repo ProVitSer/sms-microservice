@@ -1,5 +1,5 @@
 import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
-import { Sms } from '../schemas/sms.schema';
+import { Sms } from '../../sms/sms.schema';
 
 export class BaseCheckSmsStatusDataAdapter {
     public readonly clientConfig: SmsClientConfig;

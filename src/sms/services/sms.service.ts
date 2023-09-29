@@ -1,19 +1,18 @@
 import { CacheService } from '@app/cache/cache.service';
 import { Injectable } from '@nestjs/common';
-import { SendSmsMsgData } from '../interfaces/sms.interfaces';
 import { SmsClientConfig, SmsTimeRanges } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { AppLoggerService } from '@app/app-logger/app-logger.service';
-import { CLIENT_CONFIG_ERROR, CLIENT_DEACTIVATE, NOT_SEND_INTERVALS } from '../sms.consts';
+import { CLIENT_CONFIG_ERROR, CLIENT_DEACTIVATE, NOT_SEND_INTERVALS } from '../interfaces/sms.consts';
 import { parse, isWithinInterval, format } from 'date-fns';
 import { SmsModelService } from './sms-model.service';
 import { CancelDataAdapter } from '../adapters/cancel-data.adapter';
-import { SmsProviderService } from '../providers/sms-provider.service';
-import { Sms } from '../schemas/sms.schema';
-import { BaseCheckSmsStatusDataAdapter } from '../adapters/base-check-sms-status-data.adapter';
-import { ResultSendSmsDataAdapter } from '../adapters/result-send-sms-data.adapter';
+import { BaseSendSmsDataAdapter } from '../adapters/base-send-sms-data.adapter';
+import { SendSmsMsgData } from '../interfaces/sms.interfaces';
+import { SmsApiProviderService } from '@app/sms-api/services/sms-api-provider.service';
 import { SendSmsDto } from '../dto/send-sms.dto';
 import { BaseSendApiSmsDataAdapter } from '../adapters/base-send-api-sms-data.asapter';
-import { BaseSendSmsDataAdapter } from '../adapters/base-send-sms-data.adapter';
+import { Sms } from '../sms.schema';
+import { CheckSmsStatusResultDataAdapter } from '@app/sms-api/adapters/check-sms-status-result-data.adapter';
 
 @Injectable()
 export class SmsService {
@@ -21,13 +20,15 @@ export class SmsService {
         private readonly smsModelService: SmsModelService,
         private readonly cacheService: CacheService,
         private readonly log: AppLoggerService,
-        private readonly smsProvider: SmsProviderService,
+        private readonly smsApiProviderService: SmsApiProviderService,
     ) {}
 
     public async sendSms(data: SendSmsMsgData): Promise<void> {
         try {
             const clientConfig = await this.getClientConfig(data);
+
             await this.checkClientConfig(data, clientConfig);
+
             await this._sendSms(data, clientConfig);
         } catch (e) {
             this.log.error(e);
@@ -35,13 +36,13 @@ export class SmsService {
         }
     }
 
-    public async getSmsStatus(smsData: Sms): Promise<ResultSendSmsDataAdapter> {
+    public async getSmsStatus(smsData: Sms): Promise<CheckSmsStatusResultDataAdapter> {
         try {
             const clientConfig = await this.getClientConfig({ clientId: smsData.clientId, externalNumber: smsData.externalNumber });
 
-            const provider = this.smsProvider.getProvider(clientConfig.smsProviderConfig.smsProvider);
+            const provider = this.smsApiProviderService.getProvider(clientConfig.smsProviderConfig.smsApiProvider);
 
-            return await provider.checkSmsStatus(new BaseCheckSmsStatusDataAdapter(smsData, clientConfig));
+            return await provider.checkSmsStatus(smsData, clientConfig);
         } catch (e) {
             this.log.error(e);
             throw e;
@@ -52,9 +53,9 @@ export class SmsService {
         try {
             const clientConfig = await this.getClientConfig({ clientId: smsData.clientId, externalNumber: smsData.externalNumber });
 
-            const provider = this.smsProvider.getProvider(clientConfig.smsProviderConfig.smsProvider);
+            const provider = this.smsApiProviderService.getProvider(clientConfig.smsProviderConfig.smsApiProvider);
 
-            const result = await provider.sendApiSms(new BaseSendApiSmsDataAdapter(smsData, clientConfig));
+            const result = await provider.sendSms(new BaseSendApiSmsDataAdapter(smsData, clientConfig));
 
             await this.smsModelService.create(result);
         } catch (e) {
@@ -64,7 +65,7 @@ export class SmsService {
     }
 
     private async _sendSms(data: SendSmsMsgData, config: SmsClientConfig): Promise<void> {
-        const provider = this.smsProvider.getProvider(config.smsProviderConfig.smsProvider);
+        const provider = this.smsApiProviderService.getProvider(config.smsProviderConfig.smsApiProvider);
 
         const result = await provider.sendSms(new BaseSendSmsDataAdapter(data, config));
 

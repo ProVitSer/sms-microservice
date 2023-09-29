@@ -1,26 +1,21 @@
 import { SmsStatus } from '@app/sms/interfaces/sms.enum';
 import { CheckSmsStatusResponse } from '../interfaces/smsc.interfaces';
-import { SmsResult } from '@app/sms/interfaces/sms.interfaces';
 import { SMSC_ERROR_CODE_DESCRIPTION, SMSC_STATUS_DESCRIPTION, SMSC_STATUS_TO_SMS_STATUS } from '../smsc.consts';
-import { BaseCheckSmsStatusDataAdapter } from '@app/sms/adapters/base-check-sms-status-data.adapter';
+import { BaseCheckSmsStatusDataAdapter } from '@app/sms-api/adapters/base-check-sms-status-data.adapter';
+import { CheckSmsStatuResult } from '@app/sms-api/interfaces/sms-api.interfaces';
 
 export class SmscCheckStatusResultAdapter {
-    public data: SmsResult;
+    public data: CheckSmsStatuResult;
     constructor(private smscData: BaseCheckSmsStatusDataAdapter, private result: CheckSmsStatusResponse) {
         this.data = this.formatResultData();
     }
 
-    private formatResultData(): SmsResult {
+    private formatResultData(): CheckSmsStatuResult {
         const resultStatusInfo = 'error_code' in this.result ? this.formatError() : this.getResultStatus();
         return {
             ...resultStatusInfo,
-            smsProvider: this.smscData.smsData.smsProvider,
             clientId: this.smscData.clientConfig.clientId,
             smsId: this.smscData.smsData.smsId,
-            externalNumber: this.smscData.smsData.externalNumber,
-            smsText: this.smscData.smsData.smsText,
-            sender: this.smscData.smsData.sender,
-            smsSendType: this.smscData.smsData.smsSendType,
         };
     }
 

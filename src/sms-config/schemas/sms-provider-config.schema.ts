@@ -1,10 +1,10 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { SmsProviderType } from '../interfaces/sms.-config.enum';
+import { SmsApiProviderType } from '../interfaces/sms.-config.enum';
 
 @Schema({ _id: false })
 export class SmsProviderConfig {
-    @Prop({ type: String, enum: SmsProviderType })
-    smsProvider: SmsProviderType;
+    @Prop({ type: String, enum: SmsApiProviderType })
+    smsApiProvider: SmsApiProviderType;
 
     @Prop({ required: false })
     email?: string;

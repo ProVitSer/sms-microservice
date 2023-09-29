@@ -1,9 +1,9 @@
 import { IsArray, IsDefined, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { SmsProviderType } from '../interfaces/sms.-config.enum';
+import { SmsApiProviderType } from '../interfaces/sms.-config.enum';
 
 export class SmsProviderConfigDto {
-    @IsEnum(SmsProviderType)
-    smsProvider: SmsProviderType;
+    @IsEnum(SmsApiProviderType)
+    smsApiProvider: SmsApiProviderType;
 
     @IsEmail({}, { message: 'Некорретный формат почты' })
     @IsOptional()

@@ -1,8 +1,8 @@
 import { RabbitMqExchange, QueueTypes, RoutingKey, Channels } from '@app/rabbit/interfaces/rabbit.enum';
 import { RabbitSubscribe, Nack } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
-import { SendSmsMsgData } from '../interfaces/sms.interfaces';
 import { SmsService } from '../services/sms.service';
+import { SendSmsMsgData } from '../interfaces/sms.interfaces';
 
 @Injectable()
 export class SmsMessagingSubscribe {
@@ -18,6 +18,7 @@ export class SmsMessagingSubscribe {
     })
     public async sendSmsSubHandler(msg: SendSmsMsgData): Promise<void | Nack> {
         try {
+            console.log(msg);
             await this.smsService.sendSms(msg);
         } catch (e) {
             return;

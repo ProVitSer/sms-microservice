@@ -1,7 +1,7 @@
 import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
-import { SmsSendType } from '../interfaces/sms.enum';
+import { SmsUtils } from '../../utils/sms.utils';
 import { SendApiSmsMsgData } from '../interfaces/sms.interfaces';
-import { SmsUtils } from '../sms.utils';
+import { SmsSendType } from '../interfaces/sms.enum';
 
 export class BaseSendApiSmsDataAdapter {
     public readonly clientId: string;

@@ -7,7 +7,7 @@ import { CheckSmsStatusResponse, SendSmsResponse, SmsCheckSmsStatusParams, SmscS
 export class SmscService {
     constructor(private readonly http: HttpRequestService) {}
 
-    public async sendSmscSms(requestData: SmscSendSmsData): Promise<SendSmsResponse> {
+    public async sendSmscSms(requestData: SmscSendSmsData): Promise<any> {
         try {
             return await this.http.post<SmscSendSmsData, SendSmsResponse>(
                 { data: requestData },
