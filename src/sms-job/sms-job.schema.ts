@@ -1,28 +1,54 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import { SmsJobSendStatus, SmsJobStatus } from './interfaces/sms-job.enum';
 
 @Schema({ collection: 'sms-job' })
 export class SmsJob {
+    @Prop({ enum: SmsJobStatus })
+    status: SmsJobStatus;
+
+    @Prop({ type: String, default: uuidv4, unique: true })
+    smsJobId: string;
+
     @Prop({ type: String })
     clientId: string;
 
     @Prop({ type: String })
     sender: string;
 
-    @Prop({ type: String })
-    smsJobId: string;
-
     @Prop({ type: [String] })
     externalNumbers: string[];
+
+    @Prop()
+    sendSmsInfo: SendSmsInfo[];
 
     @Prop({ type: String })
     smsText: string;
 
-    @Prop({ type: String })
-    sendTime: string;
+    @Prop({ type: Date })
+    sendTime: Date;
 
-    @Prop({ type: Boolean })
+    @Prop({ type: Boolean, default: false })
     deleted?: boolean;
+
+    @Prop({ type: Date, default: Date.now })
+    created?: Date;
+
+    @Prop({ type: Date, default: Date.now })
+    changed?: Date;
+}
+
+@Schema()
+export class SendSmsInfo {
+    @Prop({ enum: SmsJobSendStatus, isRequired: false })
+    sendStatus?: SmsJobSendStatus;
+
+    @Prop({ type: String })
+    number: string;
+
+    @Prop({ type: String })
+    result: string;
 
     @Prop({ type: Date, default: Date.now })
     created?: Date;
