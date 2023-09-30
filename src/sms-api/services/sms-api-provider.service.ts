@@ -4,7 +4,7 @@ import { SmsAero } from '../providers/sms-aero/sms-aero';
 import { SmsRu } from '../providers/sms-ru/sms-ru';
 import { Smsc } from '../providers/smsc/smsc';
 import { Injectable } from '@nestjs/common';
-import { PROVIDER_ERROR } from '../interfaces/sms-api.consts';
+import { PROVIDER_ERROR } from '../sms-api.consts';
 import { SmsApiProvider } from './sms-api.provider';
 
 @Injectable()

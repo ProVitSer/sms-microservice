@@ -10,7 +10,7 @@ import { MAX_CHECK_SMS_STATUS_ATTEMPTS } from '../sms.config';
 import { SMS_STATUS_FAILED } from '../sms.consts';
 
 @Injectable()
-export class CheckSmscSmsStatus {
+export class CheckSmscSmsStatusSchedule {
     constructor(
         private readonly smsModelService: SmsModelService,
         private readonly smsService: SmsService,
@@ -25,6 +25,9 @@ export class CheckSmscSmsStatus {
                 smsProvider: SmsApiProviderType.smsc,
                 checkSmsStatusAttempts: { $lt: MAX_CHECK_SMS_STATUS_ATTEMPTS },
             });
+
+            if (smscSms.length == 0) return;
+
             await this._checkSmsStatus(smscSms);
         } catch (e) {
             this.log.error(e);

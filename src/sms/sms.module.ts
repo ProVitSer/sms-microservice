@@ -8,7 +8,7 @@ import { SmsModelService } from './services/sms-model.service';
 import { SmsService } from './services/sms.service';
 import { SmsApiModule } from '@app/sms-api/sms-api.module';
 import { SmsController } from './controllers/sms.controller';
-import { CheckSmscSmsStatus } from './schedule/check-smsc-sms-status.schedule';
+import { CheckSmscSmsStatusSchedule } from './schedule/check-smsc-sms-status.schedule';
 import { SmsMessagingSubscribe } from './sms-mq/sms-messaging.subscribe';
 
 @Module({
@@ -19,7 +19,7 @@ import { SmsMessagingSubscribe } from './sms-mq/sms-messaging.subscribe';
         RabbitModule,
         SmsApiModule,
     ],
-    providers: [SmsModelService, SmsService, CheckSmscSmsStatus, SmsMessagingSubscribe],
+    providers: [SmsModelService, SmsService, CheckSmscSmsStatusSchedule, SmsMessagingSubscribe],
     controllers: [SmsController],
     exports: [],
 })

@@ -21,7 +21,7 @@ export class SmsJobModelService {
         return await this.smsJobModel.findOne(filter, SMS_JOB_PROJECTION);
     }
 
-    public async find(filter: Partial<SmsJob>): Promise<SmsJob[]> {
+    public async find(filter: { [key: string]: any }): Promise<SmsJob[]> {
         return await this.smsJobModel.find(filter, SMS_JOB_PROJECTION);
     }
 
@@ -29,7 +29,7 @@ export class SmsJobModelService {
         return await this.smsJobModel.deleteOne(filter);
     }
 
-    public async updateOne(filter: Partial<SmsJob>, update: Partial<SmsJob>): Promise<UpdateWriteOpResult> {
+    public async updateOne(filter: { [key: string]: any }, update: { [key: string]: any }): Promise<UpdateWriteOpResult> {
         update.changed = new Date();
         return await this.smsJobModel.updateOne(filter, update);
     }

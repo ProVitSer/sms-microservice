@@ -4,15 +4,15 @@ import { v1 } from 'uuid';
 import { SendSmsResult } from '../interfaces/sms-api.interfaces';
 
 export class SendSmsResultDataAdapter {
-    public status: SmsStatus;
-    public smsApiProviderType: SmsApiProviderType;
-    public clientId: string;
-    public smsId: string;
-    public externalNumber: string;
-    public smsText: string;
-    public result: string;
-    public sender: string;
-    public smsSendType: SmsSendType;
+    public readonly status: SmsStatus;
+    public readonly smsApiProviderType: SmsApiProviderType;
+    public readonly clientId: string;
+    public readonly smsId: string;
+    public readonly externalNumber: string;
+    public readonly smsText: string;
+    public readonly result: string;
+    public readonly sender: string;
+    public readonly smsSendType: SmsSendType;
 
     constructor(data: SendSmsResult) {
         this.status = data.status;

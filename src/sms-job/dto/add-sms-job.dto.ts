@@ -9,6 +9,10 @@ export class AddSmsJobDto {
     @IsDefined()
     sender: string;
 
+    @IsString()
+    @IsDefined()
+    name: string;
+
     @IsArray()
     @IsDefined()
     externalNumbers: string[];
