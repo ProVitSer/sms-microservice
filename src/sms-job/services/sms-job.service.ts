@@ -7,14 +7,31 @@ import ClientJobsNotFoundException from '../exceptions/client-jobs-not-found.exe
 import { AddNewSmsJobDataAdapter } from '../adapters/add-new-sms-job-data.adapter';
 import { UpdateSmsJobDto } from '../dto/update-sms-job.dto';
 import { UpdateSmsJobAdapter } from '../adapters/update-sms-job.adapter';
+import { SmsJobStatus } from '../interfaces/sms-job.enum';
+import { CacheService } from '@app/cache/cache.service';
+import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
+import { CLIENT_NOT_ACTIVE } from '../sms-job.consts';
+import { SmsApiProviderService } from '@app/sms-api/services/sms-api-provider.service';
+import { AppLoggerService } from '@app/app-logger/app-logger.service';
+import { ResultUpdateSmsJobAdapter } from '../adapters/result-update-sms-job.adapter';
+import ClientNotFoundException from '../exceptions/client-not-found.exeption';
 
 @Injectable()
 export class SmsJobService {
-    constructor(private readonly smsJobModelService: SmsJobModelService) {}
+    constructor(
+        private readonly smsJobModelService: SmsJobModelService,
+        private readonly cacheService: CacheService,
+        private readonly log: AppLoggerService,
+        private readonly smsApiProviderService: SmsApiProviderService,
+    ) {}
 
     public async addSmsJob(data: AddSmsJobDto): Promise<SmsJob> {
         try {
-            return await this.smsJobModelService.create(new AddNewSmsJobDataAdapter(data));
+            const clientConfig = await this.getClientConfig(data.clientId);
+
+            if (!clientConfig) throw new ClientNotFoundException(data.clientId);
+
+            return await this.smsJobModelService.create(new AddNewSmsJobDataAdapter(data, clientConfig));
         } catch (e) {
             throw e;
         }
@@ -47,5 +64,54 @@ export class SmsJobService {
         if (!smsJobResult) throw new SmsJobIdNotFoundException(smsJobId);
 
         return smsJobResult;
+    }
+
+    public async startSmsJob() {
+        try {
+            const smsJobs = await this.findMessagesToSend(new Date().toISOString());
+            console.log(smsJobs);
+
+            if (smsJobs.length == 0) return;
+
+            for (const smsJob of smsJobs) {
+                await this.setInProgress(smsJob);
+
+                const clientConfig = await this.getClientConfig(smsJob.clientId);
+
+                await this.checkClientConfig(smsJob, clientConfig);
+
+                await this.sendMassSms(smsJob, clientConfig);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    private async sendMassSms(smsJob: SmsJob, clientConfig: SmsClientConfig): Promise<void> {
+        const provider = this.smsApiProviderService.getProvider(clientConfig.smsProviderConfig.smsApiProvider);
+
+        const result = await provider.sendMassSms(smsJob, clientConfig);
+
+        await this.smsJobModelService.update(result.smsJobId, new ResultUpdateSmsJobAdapter(result));
+    }
+
+    private async findMessagesToSend(currentTime: string): Promise<SmsJob[]> {
+        return await this.smsJobModelService.find({ status: SmsJobStatus.planned, sendTime: { $lte: currentTime } });
+    }
+
+    private async setInProgress(smsJob: SmsJob): Promise<void> {
+        await this.smsJobModelService.updateOne({ smsJobId: smsJob.smsJobId }, { status: SmsJobStatus.inProgress });
+    }
+
+    private async getClientConfig(clientId: string): Promise<SmsClientConfig | undefined> {
+        return await this.cacheService.get<SmsClientConfig>(clientId);
+    }
+
+    private async checkClientConfig(smsJob: SmsJob, clientConfig: SmsClientConfig | undefined): Promise<void> {
+        if (!clientConfig && !clientConfig.isActive)
+            throw await this.smsJobModelService.updateOne(
+                { smsJobId: smsJob.smsJobId },
+                { status: SmsJobStatus.apiFail, result: CLIENT_NOT_ACTIVE },
+            );
     }
 }

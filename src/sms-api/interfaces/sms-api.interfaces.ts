@@ -2,6 +2,7 @@ import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum'
 import { SmsApiProvider } from '../services/sms-api.provider';
 import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { SmsSendType, SmsStatus } from '@app/sms/interfaces/sms.enum';
+import { SmsJobSendStatus, SmsJobStatus } from '@app/sms-job/interfaces/sms-job.enum';
 
 export interface SmsApiProviderInterface {
     get provider(): SmsApiProviders;
@@ -37,5 +38,19 @@ export interface CheckSmsStatuResult {
     status: SmsStatus;
     clientId: string;
     smsId: string;
+    result: string;
+}
+
+export interface SendMassSmsResult {
+    status: SmsJobStatus;
+    smsJobId: string;
+    clientId: string;
+    sendSmsToNumbersInfo: SendSmsToNumbersInfo[];
+}
+
+export interface SendSmsToNumbersInfo {
+    sendStatus: SmsJobSendStatus;
+    smsId: string;
+    number: string;
     result: string;
 }
