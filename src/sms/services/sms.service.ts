@@ -13,6 +13,7 @@ import { SendSmsDto } from '../dto/send-sms.dto';
 import { BaseSendApiSmsDataAdapter } from '../adapters/base-send-api-sms-data.asapter';
 import { Sms } from '../sms.schema';
 import { CheckSmsStatusResultDataAdapter } from '@app/sms-api/adapters/check-sms-status-result-data.adapter';
+import ClientNotActiveException from '../exceptions/client-not-active.exeption';
 
 @Injectable()
 export class SmsService {
@@ -52,6 +53,11 @@ export class SmsService {
     public async sendApiSms(smsData: SendSmsDto): Promise<void> {
         try {
             const clientConfig = await this.getClientConfig({ clientId: smsData.clientId, externalNumber: smsData.externalNumber });
+
+            if (!clientConfig.isActive) {
+                await this.smsModelService.create(new CancelDataAdapter(smsData, clientConfig, CLIENT_DEACTIVATE));
+                throw new ClientNotActiveException(smsData.clientId);
+            }
 
             const provider = this.smsApiProviderService.getProvider(clientConfig.smsProviderConfig.smsApiProvider);
 
