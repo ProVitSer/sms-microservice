@@ -47,3 +47,15 @@ export interface CheckSmsStatusResponse extends ErrorResponse {
     last_timestamp?: string;
     flag?: string;
 }
+
+export interface SendSmsJob {
+    add: number;
+    sender?: string;
+    login: string;
+    psw: string;
+    name: string;
+    phones: string;
+    mes: string;
+    fmt?: ResponseFormat;
+    charset?: CharsetType;
+}

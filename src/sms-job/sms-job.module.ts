@@ -6,10 +6,20 @@ import { SmsJob, SmsJobSchema } from './sms-job.schema';
 import { SmsJobController } from './controllers/sms-job.controller';
 import { SmsJobService } from './services/sms-job.service';
 import { SmsJobModelService } from './services/sms-job-model.service';
+import { SmsJobsSchedule } from './schedule/sms-jobs.schedule';
+import { SmsConfigModule } from '@app/sms-config/sms-config.module';
+import { SmsApiModule } from '@app/sms-api/sms-api.module';
+import { CheckStatusSmscJobSchedule } from './schedule/check-status-sms-job.schedule';
 
 @Module({
-    imports: [ConfigModule, MongooseModule.forFeature([{ name: SmsJob.name, schema: SmsJobSchema }]), ScheduleModule.forRoot()],
-    providers: [SmsJobService, SmsJobModelService],
+    imports: [
+        ConfigModule,
+        MongooseModule.forFeature([{ name: SmsJob.name, schema: SmsJobSchema }]),
+        ScheduleModule.forRoot(),
+        SmsConfigModule,
+        SmsApiModule,
+    ],
+    providers: [SmsJobService, SmsJobModelService, SmsJobsSchedule, CheckStatusSmscJobSchedule],
     exports: [],
     controllers: [SmsJobController],
 })

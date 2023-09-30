@@ -7,5 +7,6 @@ export enum SmsJobStatus {
 
 export enum SmsJobSendStatus {
     error = 'error',
+    inProgress = 'inProgress',
     completed = 'completed',
 }

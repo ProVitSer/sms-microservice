@@ -57,3 +57,7 @@ export enum CharsetType {
 export enum DelSms {
     yes = 1,
 }
+
+export enum AddType {
+    add = 1, // хз что такое, в доке нет описания
+}
