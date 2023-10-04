@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { SmsAero } from './sms-aero';
+import { HttpRequestModule } from '@app/http-request/http.module';
+import { SmsAeroApiService } from './sms-aero-api.service';
 
 @Module({
-    imports: [ConfigModule],
-    providers: [SmsAero],
+    imports: [HttpRequestModule],
+    providers: [SmsAero, SmsAeroApiService],
     exports: [SmsAero],
 })
 export class SmsAeroModule {}
