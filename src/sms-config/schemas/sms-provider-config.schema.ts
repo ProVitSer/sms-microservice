@@ -13,9 +13,6 @@ export class SmsProviderConfig {
     api_key?: string;
 
     @Prop({ required: false })
-    api_id?: string;
-
-    @Prop({ required: false })
     login?: string;
 
     @Prop({ required: false })
