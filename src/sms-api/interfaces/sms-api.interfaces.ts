@@ -3,6 +3,7 @@ import { SmsApiProvider } from '../services/sms-api.provider';
 import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { SmsSendType, SmsStatus } from '@app/sms/interfaces/sms.enum';
 import { SmsJobSendStatus, SmsJobStatus } from '@app/sms-job/interfaces/sms-job.enum';
+import { SmsAeroCallbackSendingResult } from '../providers/sms-aero/interfaces/sms-aero.interfaces';
 
 export interface SmsApiProviderInterface {
     get provider(): SmsApiProviders;
@@ -54,3 +55,5 @@ export interface SendSmsToNumbersInfo {
     number: string;
     result: string;
 }
+
+export type IncomingSmsSendingResult = SmsAeroCallbackSendingResult;

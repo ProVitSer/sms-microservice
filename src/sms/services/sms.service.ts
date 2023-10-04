@@ -14,6 +14,8 @@ import { BaseSendApiSmsDataAdapter } from '../adapters/base-send-api-sms-data.as
 import { Sms } from '../sms.schema';
 import { CheckSmsStatusResultDataAdapter } from '@app/sms-api/adapters/check-sms-status-result-data.adapter';
 import ClientNotActiveException from '../exceptions/client-not-active.exeption';
+import { IncomingSmsSendingResult } from '@app/sms-api/interfaces/sms-api.interfaces';
+import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 
 @Injectable()
 export class SmsService {
@@ -26,7 +28,7 @@ export class SmsService {
 
     public async sendSms(data: SendSmsMsgData): Promise<void> {
         try {
-            const clientConfig = await this.getClientConfig(data);
+            const clientConfig = await this.getClientConfig(data.clientId);
 
             await this.checkClientConfig(data, clientConfig);
 
@@ -39,7 +41,7 @@ export class SmsService {
 
     public async getSmsStatus(smsData: Sms): Promise<CheckSmsStatusResultDataAdapter> {
         try {
-            const clientConfig = await this.getClientConfig({ clientId: smsData.clientId, externalNumber: smsData.externalNumber });
+            const clientConfig = await this.getClientConfig(smsData.clientId);
 
             const provider = this.smsApiProviderService.getProvider(clientConfig.smsProviderConfig.smsApiProvider);
 
@@ -50,9 +52,26 @@ export class SmsService {
         }
     }
 
+    public async parseSmsSendingResult(
+        body: IncomingSmsSendingResult,
+        clientId: string,
+        smsApiProvider: SmsApiProviderType,
+    ): Promise<void> {
+        try {
+            const provider = this.smsApiProviderService.getProvider(smsApiProvider);
+
+            const result = await provider.parseSmsResult(body, clientId);
+
+            await this.smsModelService.update({ smsId: result.smsId }, { ...result });
+        } catch (e) {
+            this.log.error(e);
+            throw e;
+        }
+    }
+
     public async sendApiSms(smsData: SendSmsDto): Promise<void> {
         try {
-            const clientConfig = await this.getClientConfig({ clientId: smsData.clientId, externalNumber: smsData.externalNumber });
+            const clientConfig = await this.getClientConfig(smsData.clientId);
 
             if (!clientConfig.isActive) {
                 await this.smsModelService.create(new CancelDataAdapter(smsData, clientConfig, CLIENT_DEACTIVATE));
@@ -78,10 +97,10 @@ export class SmsService {
         await this.smsModelService.create(result);
     }
 
-    private async getClientConfig(data: SendSmsMsgData): Promise<SmsClientConfig> {
-        const clientConf = await this.cacheService.get<SmsClientConfig>(data.clientId);
+    private async getClientConfig(clientId: string): Promise<SmsClientConfig> {
+        const clientConf = await this.cacheService.get<SmsClientConfig>(clientId);
 
-        if (!clientConf) throw new Error(`${CLIENT_CONFIG_ERROR}: ${data.clientId}`);
+        if (!clientConf) throw new Error(`${CLIENT_CONFIG_ERROR}: ${clientId}`);
 
         return clientConf;
     }
