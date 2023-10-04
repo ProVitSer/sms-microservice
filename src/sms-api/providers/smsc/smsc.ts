@@ -13,6 +13,8 @@ import { BaseMassSendSmsDataAdapter } from '@app/sms-api/adapters/base-mass-send
 import { SendMassSmsResultDataAdapter } from '@app/sms-api/adapters/send-mass-sms-result-data.adapter';
 import { SmscSendSmsJobDataAdapter } from './adapters/smsc-send-sms-job-data.adapter';
 import { SmscSendSmsJobResultAdapter } from './adapters/smsc-send-sms-job-result.adapter';
+import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
+import { IncomingSmsSendingResult } from '@app/sms-api/interfaces/sms-api.interfaces';
 
 @Injectable()
 export class Smsc extends SmsApiProvider {
@@ -36,5 +38,13 @@ export class Smsc extends SmsApiProvider {
     public async massSmsSending(dataAdapter: BaseMassSendSmsDataAdapter): Promise<SendMassSmsResultDataAdapter> {
         const result = await this.smscApiService.sendJobs(new SmscSendSmsJobDataAdapter(dataAdapter).requestParams);
         return new SmscSendSmsJobResultAdapter(dataAdapter, result);
+    }
+
+    public async checkConnetion(clientConfig: SmsClientConfig): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
+
+    public async parseSmsSendingResult(result: IncomingSmsSendingResult, clientId: string): Promise<CheckSmsStatusResultDataAdapter> {
+        throw new Error('Method not implemented.');
     }
 }
