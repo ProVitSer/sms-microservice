@@ -23,10 +23,10 @@ export class HttpRequestService {
         }
     }
 
-    public async get<T>(url: string, requestConfig: HttpRequestConfigInterface): Promise<T> {
+    public async get<T>(url: string, requestConfig?: HttpRequestConfigInterface): Promise<T> {
         try {
             const response = await firstValueFrom(
-                this.httpService.get(url, requestConfig.customRequestConfig).pipe(
+                this.httpService.get(url, requestConfig?.customRequestConfig).pipe(
                     catchError((error: AxiosError) => {
                         throw error;
                     }),
