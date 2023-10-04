@@ -1,4 +1,4 @@
-import { SendSmsResponse } from '../interfaces/smsc.interfaces';
+import { SmscSendSmsResponse } from '../interfaces/smsc.interfaces';
 import { SmscStatus } from '../interfaces/smsc.enum';
 import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 import { SmscSendSmsDataAdapter } from './smsc-send-sms-data.adapter';
@@ -18,7 +18,7 @@ export class SmscSendSmsResultAdapter implements SendSmsResultDataAdapter {
     public smsSendType: SmsSendType;
     public result: string;
 
-    constructor(private smsData: SmscSendSmsDataAdapter, private sendSmsResponse: SendSmsResponse) {
+    constructor(private smsData: SmscSendSmsDataAdapter, private sendSmsResponse: SmscSendSmsResponse) {
         const data = this.formatResultData();
         this.status = data.status;
         this.smsApiProviderType = data.smsApiProviderType;

@@ -2,7 +2,7 @@ import { BaseMassSendSmsDataAdapter } from '@app/sms-api/adapters/base-mass-send
 import { SendMassSmsResultDataAdapter } from '@app/sms-api/adapters/send-mass-sms-result-data.adapter';
 import { SendSmsToNumbersInfo } from '@app/sms-api/interfaces/sms-api.interfaces';
 import { SmsJobSendStatus, SmsJobStatus } from '@app/sms-job/interfaces/sms-job.enum';
-import { SendSmsResponse } from '../interfaces/smsc.interfaces';
+import { SmscSendSmsResponse } from '../interfaces/smsc.interfaces';
 import { SMSC_ERROR_CODE_DESCRIPTION } from '../smsc.consts';
 
 export class SmscSendSmsJobResultAdapter implements SendMassSmsResultDataAdapter {
@@ -10,7 +10,7 @@ export class SmscSendSmsJobResultAdapter implements SendMassSmsResultDataAdapter
     smsJobId: string;
     clientId: string;
     sendSmsToNumbersInfo: SendSmsToNumbersInfo[];
-    constructor(public dataAdapter: BaseMassSendSmsDataAdapter, public sendSmsResponse: SendSmsResponse) {
+    constructor(public dataAdapter: BaseMassSendSmsDataAdapter, public sendSmsResponse: SmscSendSmsResponse) {
         this.status = 'error_code' in this.sendSmsResponse ? SmsJobStatus.apiFail : SmsJobStatus.inProgress;
         this.smsJobId = dataAdapter.smsJobId;
         this.clientId = dataAdapter.clientId;

@@ -27,7 +27,6 @@ export class CheckStatusSmscJobSchedule {
         try {
             await this.startCheckSmscJobs();
         } catch (e) {
-            console.log(e);
             this.log.error(e);
         }
     }

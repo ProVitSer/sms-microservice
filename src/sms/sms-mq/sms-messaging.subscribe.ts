@@ -18,7 +18,6 @@ export class SmsMessagingSubscribe {
     })
     public async sendSmsSubHandler(msg: SendSmsMsgData): Promise<void | Nack> {
         try {
-            console.log(msg);
             await this.smsService.sendSms(msg);
         } catch (e) {
             return;

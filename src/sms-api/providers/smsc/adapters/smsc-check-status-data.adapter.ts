@@ -1,9 +1,9 @@
-import { SmsCheckSmsStatusParams } from '../interfaces/smsc.interfaces';
+import { SmscCheckSmsStatusParams } from '../interfaces/smsc.interfaces';
 import { ResponseFormat } from '../interfaces/smsc.enum';
 import { BaseCheckSmsStatusDataAdapter } from '@app/sms-api/adapters/base-check-sms-status-data.adapter';
 
 export class SmscCheckStatusDataAdapter {
-    public requestParams: SmsCheckSmsStatusParams;
+    public requestParams: SmscCheckSmsStatusParams;
     constructor(dataAdapter: BaseCheckSmsStatusDataAdapter) {
         this.requestParams = {
             id: dataAdapter.smsData.smsId,

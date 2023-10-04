@@ -1,12 +1,12 @@
 import { BaseMassSendSmsDataAdapter } from '@app/sms-api/adapters/base-mass-send-sms-data.adapter';
-import { SendSmsJob } from '../interfaces/smsc.interfaces';
+import { SmscSendSmsJob } from '../interfaces/smsc.interfaces';
 import { SmscConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { SmsProviderConfig } from '@app/sms-config/schemas/sms-provider-config.schema';
 import { AddType, CharsetType, ResponseFormat } from '../interfaces/smsc.enum';
 
 export class SmscSendSmsJobDataAdapter {
     private readonly smscConfig: SmscConfig;
-    public requestParams: SendSmsJob;
+    public requestParams: SmscSendSmsJob;
     constructor(public dataAdapter: BaseMassSendSmsDataAdapter) {
         this.smscConfig = dataAdapter.clientConfig.smsProviderConfig as Required<Pick<SmsProviderConfig, 'login' | 'password'>>;
         const sender = dataAdapter.sender !== 'default' ? { sender: dataAdapter.sender } : {};

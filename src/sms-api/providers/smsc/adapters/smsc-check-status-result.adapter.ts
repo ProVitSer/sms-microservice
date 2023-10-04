@@ -1,5 +1,5 @@
 import { SmsStatus } from '@app/sms/interfaces/sms.enum';
-import { CheckSmsStatusResponse } from '../interfaces/smsc.interfaces';
+import { SmscCheckSmsStatusResponse } from '../interfaces/smsc.interfaces';
 import { SMSC_ERROR_CODE_DESCRIPTION, SMSC_STATUS_DESCRIPTION, SMSC_STATUS_TO_SMS_STATUS } from '../smsc.consts';
 import { BaseCheckSmsStatusDataAdapter } from '@app/sms-api/adapters/base-check-sms-status-data.adapter';
 import { CheckSmsStatuResult } from '@app/sms-api/interfaces/sms-api.interfaces';
@@ -10,7 +10,7 @@ export class SmscCheckStatusResultAdapter implements CheckSmsStatusResultDataAda
     public clientId: string;
     public smsId: string;
     public result: string;
-    constructor(private smscData: BaseCheckSmsStatusDataAdapter, private checkSmsStatusResponse: CheckSmsStatusResponse) {
+    constructor(private smscData: BaseCheckSmsStatusDataAdapter, private checkSmsStatusResponse: SmscCheckSmsStatusResponse) {
         const data = this.formatResultData();
         this.status = data.status;
         this.clientId = data.clientId;

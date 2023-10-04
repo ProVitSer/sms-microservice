@@ -1,4 +1,5 @@
 import { Alltype, CharsetType, DelSms, ResponseFormat, SmscErrorCode, SmscStatus, SmscTranslit, Tinyurl } from './smsc.enum';
+
 export interface SmscBaseData {
     login: string;
     psw: string;
@@ -16,12 +17,12 @@ export interface SmscSendSmsData extends SmscBaseData {
     tz?: number;
     list?: string;
 }
-export interface ErrorResponse {
+export interface SmscErrorResponse {
     error?: string;
     error_code?: SmscErrorCode;
 }
 
-export interface SendSmsResponse extends ErrorResponse {
+export interface SmscSendSmsResponse extends SmscErrorResponse {
     cnt?: number;
     id?: string;
 }
@@ -33,7 +34,7 @@ export interface SmscData {
     smsText: string;
 }
 
-export interface SmsCheckSmsStatusParams extends Omit<SmscBaseData, 'phones'> {
+export interface SmscCheckSmsStatusParams extends Omit<SmscBaseData, 'phones'> {
     id: string;
     phone: string;
     all?: Alltype;
@@ -41,14 +42,14 @@ export interface SmsCheckSmsStatusParams extends Omit<SmscBaseData, 'phones'> {
     del?: DelSms;
 }
 
-export interface CheckSmsStatusResponse extends ErrorResponse {
+export interface SmscCheckSmsStatusResponse extends SmscErrorResponse {
     status?: SmscStatus;
     last_date?: string;
     last_timestamp?: string;
     flag?: string;
 }
 
-export interface SendSmsJob {
+export interface SmscSendSmsJob {
     add: number;
     sender?: string;
     login: string;

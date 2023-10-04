@@ -69,7 +69,6 @@ export class SmsJobService {
     public async startSmsJob() {
         try {
             const smsJobs = await this.findMessagesToSend(new Date().toISOString());
-            console.log(smsJobs);
 
             if (smsJobs.length == 0) return;
 
