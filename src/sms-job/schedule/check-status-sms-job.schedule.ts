@@ -40,7 +40,7 @@ export class CheckStatusSmscJobSchedule {
         }
     }
 
-    private async checkSmsJobStatus(smsJob: SmsJob) {
+    private async checkSmsJobStatus(smsJob: SmsJob): Promise<void> {
         const clientConfig = await this.cacheService.get<SmsClientConfig>(smsJob.clientId);
         await Promise.all(
             smsJob.sendSmsInfo.map(async (smsInfo: SendSmsInfo) => {
@@ -50,7 +50,7 @@ export class CheckStatusSmscJobSchedule {
         await this.checkSendSmsInfoStatus(smsJob);
     }
 
-    private async checkSendSmsInfoStatus(smsJob: SmsJob) {
+    private async checkSendSmsInfoStatus(smsJob: SmsJob): Promise<void> {
         const result = await this.smsJobModelService.findOne({ smsJobId: smsJob.smsJobId });
 
         if (!result.sendSmsInfo.some((smsInfo: SendSmsInfo) => smsInfo.sendStatus === SmsJobSendStatus.inProgress)) {
@@ -58,7 +58,7 @@ export class CheckStatusSmscJobSchedule {
         }
     }
 
-    private async checkSmsStatus(smsJob: SmsJob, sendSmsInfo: SendSmsInfo, clientConfig: SmsClientConfig) {
+    private async checkSmsStatus(smsJob: SmsJob, sendSmsInfo: SendSmsInfo, clientConfig: SmsClientConfig): Promise<void> {
         const provider = this.smsApiProviderService.getProvider(clientConfig.smsProviderConfig.smsApiProvider);
 
         try {
@@ -71,7 +71,7 @@ export class CheckStatusSmscJobSchedule {
         }
     }
 
-    private async updateSendSmsInfo(sendSmsInfo: SendSmsInfo, checkSmsStatusResult: CheckSmsStatusResultDataAdapter) {
+    private async updateSendSmsInfo(sendSmsInfo: SendSmsInfo, checkSmsStatusResult: CheckSmsStatusResultDataAdapter): Promise<void> {
         await this.smsJobModelService.updateOne(
             { 'sendSmsInfo.number': sendSmsInfo.number },
             {
