@@ -2,9 +2,9 @@ import { SendSmsResultDataAdapter } from '@app/sms-api/adapters/send-sms-result-
 import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum';
 import { SmsStatus, SmsSendType } from '@app/sms/interfaces/sms.enum';
 import { SmsAeroBaseResponse, SmsAeroSendSmsResponse } from '../interfaces/sms-aero.interfaces';
-import { SmsAeroSendSmsDataAdapter } from './sms-aero-send-sms-data.adapter';
 import { SMS_AERO_STATUS_DESCRIPTION, SMS_AERO_STATUS_TO_SMS_STATUS, UNKNOWN_ERROR, UNKNOWN_RESULT } from '../sms-aero.consts';
 import { v1 } from 'uuid';
+import { BaseApiSendSmsDataAdapter } from '@app/sms-api/adapters';
 
 export class SmsAeroSendSmsResultAdapter implements SendSmsResultDataAdapter {
     public status: SmsStatus;
@@ -16,18 +16,17 @@ export class SmsAeroSendSmsResultAdapter implements SendSmsResultDataAdapter {
     public result: string;
     public sender: string;
     public smsSendType: SmsSendType;
-    constructor(private smsData: SmsAeroSendSmsDataAdapter, private sendSmsResponse: SmsAeroBaseResponse<SmsAeroSendSmsResponse>) {
+    constructor(private dataAdapter: BaseApiSendSmsDataAdapter, private sendSmsResponse: SmsAeroBaseResponse<SmsAeroSendSmsResponse>) {
         const result = this.checkResult();
         this.status = result.status;
         this.smsId = String(result.smsId);
         this.result = result.result;
-
         this.smsApiProviderType = SmsApiProviderType.smsAero;
-        this.clientId = this.smsData.dataAdapter.clientId;
-        this.externalNumber = this.smsData.dataAdapter.externalNumber;
-        this.smsText = this.smsData.dataAdapter.smsText;
-        this.sender = this.smsData.dataAdapter.sender;
-        this.smsSendType = this.smsData.dataAdapter.smsSendType;
+        this.clientId = this.dataAdapter.clientId;
+        this.externalNumber = this.dataAdapter.externalNumber;
+        this.smsText = this.dataAdapter.smsText;
+        this.sender = this.dataAdapter.sender;
+        this.smsSendType = this.dataAdapter.smsSendType;
     }
 
     private checkResult() {

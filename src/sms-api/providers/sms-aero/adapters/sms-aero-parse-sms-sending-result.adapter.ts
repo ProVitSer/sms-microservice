@@ -8,7 +8,7 @@ export class SmsAeroParseSmsSendingResultAdapter implements CheckSmsStatusResult
     public readonly clientId: string;
     public readonly smsId: string;
     public readonly result: string;
-    constructor(private resultSending: SmsAeroCallbackSendingResult, clientId: string) {
+    constructor(resultSending: SmsAeroCallbackSendingResult, clientId: string) {
         this.status = SMS_AERO_STATUS_TO_SMS_STATUS[resultSending.status];
         this.clientId = clientId;
         this.smsId = resultSending.id;
