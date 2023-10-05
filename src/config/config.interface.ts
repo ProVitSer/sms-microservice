@@ -9,6 +9,7 @@ export interface Configs {
 export interface AppConfig {
     port: number;
     smsApiUrl: string;
+    smsJobApiUrl: string;
 }
 
 export interface MongoConfig {

@@ -25,4 +25,10 @@ export class SmsUtils {
         const { smsApiUrl } = config.get('app');
         return smsApiUrl;
     }
+
+    static getSmsJobApiUrl() {
+        const config = new ConfigService<Configs>(configuration());
+        const { smsJobApiUrl } = config.get('app');
+        return smsJobApiUrl;
+    }
 }
