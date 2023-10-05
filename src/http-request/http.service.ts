@@ -8,10 +8,10 @@ import { AxiosError } from 'axios';
 export class HttpRequestService {
     constructor(private httpService: HttpService) {}
 
-    public async post<T, D>(requestData: HttpRequestDataInterface<T>, requestConfig: HttpRequestConfigInterface): Promise<D> {
+    public async post<T, D>(requestData: HttpRequestDataInterface<T>, requestConfig?: HttpRequestConfigInterface): Promise<D> {
         try {
             const response = await firstValueFrom(
-                this.httpService.post<D>(requestConfig.url, requestData.data, <any>requestConfig.customRequestConfig).pipe(
+                this.httpService.post<D>(requestConfig.url, requestData.data, <any>requestConfig?.customRequestConfig).pipe(
                     catchError((error: AxiosError) => {
                         throw error;
                     }),
