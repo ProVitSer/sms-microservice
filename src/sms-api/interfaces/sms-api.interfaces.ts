@@ -57,3 +57,7 @@ export interface SendSmsToNumbersInfo {
 }
 
 export type IncomingSmsSendingResult = SmsAeroCallbackSendingResult;
+
+export interface CheckConnectionSmsProviderResult {
+    result: boolean;
+}

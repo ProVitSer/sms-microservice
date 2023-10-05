@@ -2,7 +2,7 @@ import { SmsAeroSmsStatus } from './sms-aero.enum';
 
 export interface SmsAeroBaseResponse<T> {
     success: boolean;
-    data: T | T[];
+    data: T;
     message: string | null;
 }
 

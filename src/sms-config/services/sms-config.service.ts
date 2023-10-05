@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { SmsConfig } from '../schemas/sms-config.schema';
 import ClientIdExistsException from '../exceptions/client-exists.exception';
 import ClientIdNotFoundException from '../exceptions/client-id-not-fround.exeption';
-import { SmsConfignActivateDto } from '../dto/sms-config-active.dto';
+import { SmsConfigActivateDto } from '../dto/sms-config-active.dto';
 import { SmsConfigCacheService } from './sms-config-cache.service';
 import { SmsConfigModelService } from './sms-config-model.service';
 import { SmsTimeRangesModelService } from './sms-time-ranges-model.service';
@@ -10,6 +10,7 @@ import { SmsTimeRangesConfignDto } from '../dto/sms-time-range-config.dto';
 import { SmsTimeRanges } from '../schemas/sms-time-ranges.schema';
 import { parse, isWithinInterval } from 'date-fns';
 import AddNewRangeException from '../exceptions/add-new-range.exeption';
+import { SmsApiProviderService } from '@app/sms-api/services/sms-api-provider.service';
 
 @Injectable()
 export class SmsConfigService implements OnModuleInit {
@@ -17,6 +18,7 @@ export class SmsConfigService implements OnModuleInit {
         private readonly smsConfigCache: SmsConfigCacheService,
         private readonly smsConfigModel: SmsConfigModelService,
         private readonly smsTimeRangesModel: SmsTimeRangesModelService,
+        private readonly smsApiProviderService: SmsApiProviderService,
     ) {}
 
     async onModuleInit() {
@@ -49,7 +51,17 @@ export class SmsConfigService implements OnModuleInit {
         return smsConfigs;
     }
 
-    public async modifyActive(data: SmsConfignActivateDto) {
+    public async checkClientAuthConfig(clientId: string) {
+        const smsConfigs = await this.smsConfigModel.findOne({ clientId });
+
+        if (!smsConfigs) throw new ClientIdNotFoundException(clientId);
+
+        const provider = this.smsApiProviderService.getProvider(smsConfigs.smsProviderConfig.smsApiProvider);
+
+        return await provider.checkAuthorisationSmsProvider(smsConfigs.smsProviderConfig);
+    }
+
+    public async modifyActive(data: SmsConfigActivateDto) {
         await this.smsConfigModel.updateOne({ clientId: data.clientId }, { isActive: data.isActive });
 
         await this.smsConfigCache.updateConfigCache(data.clientId);

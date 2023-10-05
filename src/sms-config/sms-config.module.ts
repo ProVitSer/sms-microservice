@@ -9,6 +9,8 @@ import { SmsConfigCacheService } from './services/sms-config-cache.service';
 import { SmsConfigModelService } from './services/sms-config-model.service';
 import { SmsTimeRangesModelService } from './services/sms-time-ranges-model.service';
 import { SmsTimeRangesConfigController } from './controllers/sms-time-ranges-config.controller';
+import { SmsApiModule } from '@app/sms-api/sms-api.module';
+import { SmsConfigCheckAuthController } from './controllers/sms-config-check-auth.controller';
 
 @Module({
     imports: [
@@ -17,8 +19,9 @@ import { SmsTimeRangesConfigController } from './controllers/sms-time-ranges-con
             { name: SmsConfig.name, schema: SmsConfigSchema },
             { name: SmsTimeRanges.name, schema: SmsTimeRangesSchema },
         ]),
+        SmsApiModule,
     ],
     providers: [SmsConfigService, SmsConfigCacheService, SmsConfigModelService, SmsTimeRangesModelService],
-    controllers: [SmsConfigController, SmsTimeRangesConfigController],
+    controllers: [SmsConfigController, SmsTimeRangesConfigController, SmsConfigCheckAuthController],
 })
 export class SmsConfigModule {}

@@ -10,7 +10,7 @@ import { SmsTimeRangesConfignDto } from '../dto/sms-time-range-config.dto';
 export class SmsTimeRangesModelService {
     constructor(@InjectModel(SmsTimeRanges.name) private smsTimeRangesModel: Model<SmsTimeRangesDocument>) {}
 
-    public async find(filter: Partial<SmsTimeRanges>): Promise<SmsTimeRanges[]> {
+    public async find(filter: Partial<SmsTimeRanges>) {
         return await this.smsTimeRangesModel.find(filter, SMS_TIME_RANGES_PROJECTION);
     }
 

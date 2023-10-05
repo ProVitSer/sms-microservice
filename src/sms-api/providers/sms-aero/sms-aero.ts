@@ -1,16 +1,24 @@
 import { SmsApiProvider } from '@app/sms-api/services/sms-api.provider';
 import { Injectable } from '@nestjs/common';
-import { BaseApiSendSmsDataAdapter } from '@app/sms-api/adapters/base-api-send-sms-data.adapter';
-import { BaseCheckSmsStatusDataAdapter } from '@app/sms-api/adapters/base-check-sms-status-data.adapter';
-import { CheckSmsStatusResultDataAdapter } from '@app/sms-api/adapters/check-sms-status-result-data.adapter';
-import { BaseMassSendSmsDataAdapter } from '@app/sms-api/adapters/base-mass-send-sms-data.adapter';
-import { SendMassSmsResultDataAdapter } from '@app/sms-api/adapters/send-mass-sms-result-data.adapter';
-import { SmsAeroSendSmsDataAdapter } from './adapters/sms-aero-send-sms-data.adapter';
 import { SmsAeroApiService } from './sms-aero-api.service';
-import { SmsAeroSendSmsResultAdapter } from './adapters/sms-aero-send-sms-result.adapter';
-import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
-import { SmsAeroCallbackSendingResult } from './interfaces/sms-aero.interfaces';
-import { SmsAeroParseSmsSendingResultAdapter } from './adapters/sms-aero-parse-sms-sending-result.adapter';
+import { SmsAeroBaseResponse, SmsAeroCallbackSendingResult, SmsAeroSendSmsResponse } from './interfaces/sms-aero.interfaces';
+import { SMS_AERO_STATUS_DESCRIPTION, SMS_AERO_STATUS_TO_SMS_STATUS } from './sms-aero.consts';
+import {
+    SmsAeroBaseSendDataAdapter,
+    SmsAeroParseSmsSendingResultAdapter,
+    SmsAeroSendSmsJobResultAdapter,
+    SmsAeroSendSmsResultAdapter,
+} from './adapters';
+import {
+    BaseApiSendSmsDataAdapter,
+    BaseCheckSmsStatusDataAdapter,
+    BaseMassSendSmsDataAdapter,
+    CheckSmsStatusResultDataAdapter,
+    SendMassSmsResultDataAdapter,
+    SendSmsResultDataAdapter,
+} from '@app/sms-api/adapters';
+import { CheckConnectionSmsProviderResult } from '@app/sms-api/interfaces/sms-api.interfaces';
+import { SmsProviderConfig } from '@app/sms-config/schemas/sms-provider-config.schema';
 
 @Injectable()
 export class SmsAero extends SmsApiProvider {
@@ -18,12 +26,15 @@ export class SmsAero extends SmsApiProvider {
         super();
     }
 
-    public async smsSending(dataAdapter: BaseApiSendSmsDataAdapter): Promise<any> {
-        const data = new SmsAeroSendSmsDataAdapter(dataAdapter);
+    public async smsSending(dataAdapter: BaseApiSendSmsDataAdapter): Promise<SendSmsResultDataAdapter> {
+        const data = SmsAeroBaseSendDataAdapter.single(dataAdapter);
 
-        const result = await this.smsAeroApiService.sendSmsAeroSms(data.requestData, dataAdapter.clientConfig);
+        const result = await this.smsAeroApiService.sendSmsAeroSms<SmsAeroBaseResponse<SmsAeroSendSmsResponse>>(
+            data,
+            dataAdapter.clientConfig,
+        );
 
-        return new SmsAeroSendSmsResultAdapter(data, result);
+        return new SmsAeroSendSmsResultAdapter(dataAdapter, result);
     }
 
     public async parseSmsSendingResult(
@@ -34,14 +45,30 @@ export class SmsAero extends SmsApiProvider {
     }
 
     public async checkStatusSendingSms(dataAdapter: BaseCheckSmsStatusDataAdapter): Promise<CheckSmsStatusResultDataAdapter> {
-        throw new Error('Method not implemented.');
+        const result = await this.smsAeroApiService.checkStatus({ id: Number(dataAdapter.smsData.smsId) }, dataAdapter.clientConfig);
+
+        return new CheckSmsStatusResultDataAdapter({
+            status: SMS_AERO_STATUS_TO_SMS_STATUS[result.data.status],
+            clientId: dataAdapter.smsData.clientId,
+            smsId: dataAdapter.smsData.smsId,
+            result: SMS_AERO_STATUS_DESCRIPTION[result.data.status],
+        });
     }
 
-    public async massSmsSending(dataAdapter: BaseMassSendSmsDataAdapter): Promise<SendMassSmsResultDataAdapter> {
-        throw new Error('Method not implemented.');
+    public async massSmsSending(dataAdapter: BaseMassSendSmsDataAdapter): Promise<any> {
+        const data = SmsAeroBaseSendDataAdapter.mass(dataAdapter);
+
+        const result = await this.smsAeroApiService.sendSmsAeroSms<SmsAeroBaseResponse<SmsAeroSendSmsResponse[]>>(
+            data,
+            dataAdapter.clientConfig,
+        );
+
+        return new SmsAeroSendSmsJobResultAdapter(dataAdapter, result);
     }
 
-    public async checkConnetion(clientConfig: SmsClientConfig): Promise<any> {
-        throw new Error('Method not implemented.');
+    public async checkAuthorisation(smsProviderConfig: SmsProviderConfig): Promise<CheckConnectionSmsProviderResult> {
+        const result = await this.smsAeroApiService.checkAuth(smsProviderConfig);
+
+        return { result: !!result.success };
     }
 }

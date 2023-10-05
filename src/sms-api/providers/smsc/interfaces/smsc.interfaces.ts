@@ -60,3 +60,13 @@ export interface SmscSendSmsJob {
     fmt?: ResponseFormat;
     charset?: CharsetType;
 }
+
+export interface CheckBalanceParams {
+    login: string;
+    psw: string;
+    fmt?: ResponseFormat;
+}
+
+export interface CheckBalanceResponse extends SmscErrorResponse {
+    balance?: string;
+}
