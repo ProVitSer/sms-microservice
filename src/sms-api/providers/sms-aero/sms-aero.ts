@@ -14,7 +14,6 @@ import {
     BaseCheckSmsStatusDataAdapter,
     BaseMassSendSmsDataAdapter,
     CheckSmsStatusResultDataAdapter,
-    SendMassSmsResultDataAdapter,
     SendSmsResultDataAdapter,
 } from '@app/sms-api/adapters';
 import { CheckConnectionSmsProviderResult } from '@app/sms-api/interfaces/sms-api.interfaces';
@@ -57,7 +56,6 @@ export class SmsAero extends SmsApiProvider {
 
     public async massSmsSending(dataAdapter: BaseMassSendSmsDataAdapter): Promise<any> {
         const data = SmsAeroBaseSendDataAdapter.mass(dataAdapter);
-
         const result = await this.smsAeroApiService.sendSmsAeroSms<SmsAeroBaseResponse<SmsAeroSendSmsResponse[]>>(
             data,
             dataAdapter.clientConfig,
