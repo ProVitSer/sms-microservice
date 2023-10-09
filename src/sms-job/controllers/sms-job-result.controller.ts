@@ -18,7 +18,6 @@ export class SmsJobResultController {
         @Res() res: Response,
     ) {
         try {
-            console.log(JSON.stringify(body));
             this.smsJobService.setJobResult(body, { clientId, smsJobId, smsApiProvider });
             return res.sendStatus(HttpStatus.OK);
         } catch {
