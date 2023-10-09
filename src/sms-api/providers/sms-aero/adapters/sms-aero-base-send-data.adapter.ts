@@ -10,7 +10,7 @@ export class SmsAeroBaseSendDataAdapter {
     }
 
     static mass(dataAdapter: BaseMassSendSmsDataAdapter): SmsAeroSendSmsData {
-        return this.getBaseRequestInfo(dataAdapter, SmsUtils.getSmsJobApiUrl());
+        return this.getBaseRequestInfo(dataAdapter, `${SmsUtils.getSmsJobApiUrl()}/${dataAdapter.smsJobId}`);
     }
 
     private static getBaseRequestInfo(
