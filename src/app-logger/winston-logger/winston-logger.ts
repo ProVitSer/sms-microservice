@@ -56,18 +56,18 @@ export class WinstonLogger implements IAppLogger {
     }
 
     info(message: string, payload: LogPayload) {
-        this.logger.info(message, payload.clienId, payload.context);
+        this.logger.info(message, { context: payload.context, clienId: payload.clienId });
     }
 
     error(message: string, payload: LogPayload) {
-        this.logger.error(message, payload.clienId, payload.context);
+        this.logger.error(message, { context: payload.context, clienId: payload.clienId });
     }
 
     warn(message: string, payload: LogPayload) {
-        this.logger.warn(message, payload.clienId, payload.context);
+        this.logger.warn(message, { context: payload.context, clienId: payload.clienId });
     }
 
     debug(message: string, payload: LogPayload) {
-        this.logger.debug(message, payload.clienId, payload.context);
+        this.logger.debug(message, { context: payload.context, clienId: payload.clienId });
     }
 }
