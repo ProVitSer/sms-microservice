@@ -9,9 +9,8 @@ import { SmsApiProviderType } from '@app/sms-config/interfaces/sms.-config.enum'
 import { SmsClientConfig } from '@app/sms-config/interfaces/sms-config.interfaces';
 import { Sms } from '@app/sms/sms.schema';
 import { SmsSendType, SmsStatus } from '@app/sms/interfaces/sms.enum';
-import { CheckSmsStatusResultDataAdapter } from '@app/sms-api/adapters/check-sms-status-result-data.adapter';
-import { SMS_STATUS_TO_JOB_SEND_STATUS } from '../sms-job.consts';
 import { Injectable } from '@nestjs/common';
+import { SmsJobUtilsService } from '../services/sms-job-utils.service';
 
 @Injectable()
 export class CheckStatusSmscJobSchedule {
@@ -20,6 +19,7 @@ export class CheckStatusSmscJobSchedule {
         private readonly cacheService: CacheService,
         private readonly log: AppLoggerService,
         private readonly smsApiProviderService: SmsApiProviderService,
+        private readonly smsJobUtilsService: SmsJobUtilsService,
     ) {}
 
     @Cron(CronExpression.EVERY_5_MINUTES)
@@ -47,15 +47,7 @@ export class CheckStatusSmscJobSchedule {
                 await this.checkSmsStatus(smsJob, smsInfo, clientConfig);
             }),
         );
-        await this.checkSendSmsInfoStatus(smsJob);
-    }
-
-    private async checkSendSmsInfoStatus(smsJob: SmsJob): Promise<void> {
-        const result = await this.smsJobModelService.findOne({ smsJobId: smsJob.smsJobId });
-
-        if (!result.sendSmsInfo.some((smsInfo: SendSmsInfo) => smsInfo.sendStatus === SmsJobSendStatus.inProgress)) {
-            await this.smsJobModelService.updateOne({ smsJobId: smsJob.smsJobId }, { status: SmsJobStatus.completed });
-        }
+        await this.smsJobUtilsService.checkSendSmsInfoStatus(smsJob);
     }
 
     private async checkSmsStatus(smsJob: SmsJob, sendSmsInfo: SendSmsInfo, clientConfig: SmsClientConfig): Promise<void> {
@@ -64,21 +56,11 @@ export class CheckStatusSmscJobSchedule {
         try {
             const checkSmsStatusResult = await provider.checkSmsStatus(this.formatCheckSmsStatusData(smsJob, sendSmsInfo), clientConfig);
 
-            await this.updateSendSmsInfo(sendSmsInfo, checkSmsStatusResult);
+            await this.smsJobUtilsService.updateSendSmsInfo(smsJob, checkSmsStatusResult, sendSmsInfo.number);
         } catch (e) {
             this.log.error(e);
             await this.setErrorSms(sendSmsInfo);
         }
-    }
-
-    private async updateSendSmsInfo(sendSmsInfo: SendSmsInfo, checkSmsStatusResult: CheckSmsStatusResultDataAdapter): Promise<void> {
-        await this.smsJobModelService.updateOne(
-            { 'sendSmsInfo.number': sendSmsInfo.number },
-            {
-                'sendSmsInfo.$.sendStatus': SMS_STATUS_TO_JOB_SEND_STATUS[checkSmsStatusResult.status],
-                'sendSmsInfo.$.result': checkSmsStatusResult.result,
-            },
-        );
     }
 
     private async setErrorSms(sendSmsInfo: SendSmsInfo): Promise<void> {
