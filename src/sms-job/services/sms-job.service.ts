@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AddSmsJobDto } from '../dto/add-sms-job.dto';
 import { SmsJobModelService } from './sms-job-model.service';
-import { SmsJob } from '../sms-job.schema';
+import { SendSmsInfo, SmsJob } from '../sms-job.schema';
 import SmsJobIdNotFoundException from '../exceptions/sms-job-id-not-found.exeption';
 import ClientJobsNotFoundException from '../exceptions/client-jobs-not-found.exeption';
 import { AddNewSmsJobDataAdapter } from '../adapters/add-new-sms-job-data.adapter';
@@ -15,6 +15,9 @@ import { SmsApiProviderService } from '@app/sms-api/services/sms-api-provider.se
 import { AppLoggerService } from '@app/app-logger/app-logger.service';
 import { ResultUpdateSmsJobAdapter } from '../adapters/result-update-sms-job.adapter';
 import ClientNotFoundException from '../exceptions/client-not-found.exeption';
+import { SmsJobData } from '../interfaces/sms-job.interfaces';
+import { IncomingSmsSendingResult } from '@app/sms-api/interfaces/sms-api.interfaces';
+import { SmsJobUtilsService } from './sms-job-utils.service';
 
 @Injectable()
 export class SmsJobService {
@@ -23,6 +26,7 @@ export class SmsJobService {
         private readonly cacheService: CacheService,
         private readonly log: AppLoggerService,
         private readonly smsApiProviderService: SmsApiProviderService,
+        private readonly smsJobUtilsService: SmsJobUtilsService,
     ) {}
 
     public async addSmsJob(data: AddSmsJobDto): Promise<SmsJob> {
@@ -55,6 +59,7 @@ export class SmsJobService {
 
     public async deleteSmsJob(smsJobId: string): Promise<void> {
         await this.getSmsJob(smsJobId);
+
         await this.smsJobModelService.updateOne({ smsJobId }, { deleted: true });
     }
 
@@ -84,6 +89,24 @@ export class SmsJobService {
         } catch (e) {
             throw e;
         }
+    }
+
+    public async setJobResult(body: IncomingSmsSendingResult, data: SmsJobData) {
+        const clientConfig = await this.getClientConfig(data.clientId);
+
+        const smsJob = await this.smsJobModelService.findOne({ smsJobId: data.smsJobId, deleted: false });
+
+        const sendSmsInfo = smsJob.sendSmsInfo.filter((s: SendSmsInfo) => s.smsId === body.id);
+
+        if (!clientConfig && !smsJob && sendSmsInfo.length === 0) return;
+
+        const provider = this.smsApiProviderService.getProvider(clientConfig.smsProviderConfig.smsApiProvider);
+
+        const checkSmsStatusResult = await provider.parseSmsResult(body, data.clientId);
+
+        await this.smsJobUtilsService.updateSendSmsInfo(smsJob, checkSmsStatusResult, sendSmsInfo[0].number);
+
+        await this.smsJobUtilsService.checkSendSmsInfoStatus(smsJob);
     }
 
     private async sendMassSms(smsJob: SmsJob, clientConfig: SmsClientConfig): Promise<void> {

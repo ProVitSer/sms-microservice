@@ -11,6 +11,7 @@ import { SmsConfigModule } from '@app/sms-config/sms-config.module';
 import { SmsApiModule } from '@app/sms-api/sms-api.module';
 import { CheckStatusSmscJobSchedule } from './schedule/check-status-sms-job.schedule';
 import { SmsJobResultController } from './controllers/sms-job-result.controller';
+import { SmsJobUtilsService } from './services/sms-job-utils.service';
 
 @Module({
     imports: [
@@ -20,7 +21,7 @@ import { SmsJobResultController } from './controllers/sms-job-result.controller'
         SmsConfigModule,
         SmsApiModule,
     ],
-    providers: [SmsJobService, SmsJobModelService, SmsJobsSchedule, CheckStatusSmscJobSchedule],
+    providers: [SmsJobService, SmsJobModelService, SmsJobsSchedule, CheckStatusSmscJobSchedule, SmsJobUtilsService],
     exports: [],
     controllers: [SmsJobController, SmsJobResultController],
 })
