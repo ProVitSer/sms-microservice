@@ -1,4 +1,6 @@
 export interface LogPayload {
+    clienId?: string;
+    context?: string;
     [k: string]: any;
 }
 

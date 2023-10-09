@@ -6,18 +6,18 @@ export class AppLoggerService implements LoggerService {
     constructor(@Inject('LOGGER') private readonly logger: IAppLogger) {}
 
     log(message: string, payload: LogPayload = {}) {
-        this.logger.info(message, { logData: payload });
+        this.logger.log(message, payload);
     }
 
     error(message: string, payload: LogPayload = {}) {
-        this.logger.error(message, { logData: payload });
+        this.logger.error(message, payload);
     }
 
     warn(message: string, payload: LogPayload = {}) {
-        this.logger.warn(message, { logData: payload });
+        this.logger.warn(message, payload);
     }
 
     debug(message: string, payload: LogPayload = {}) {
-        this.logger.debug(message, { logData: payload });
+        this.logger.debug(message, payload);
     }
 }
