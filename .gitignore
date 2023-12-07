@@ -398,3 +398,8 @@ Temporary Items
 dist
 .webpack
 .serverless/**/*.zip
+
+
+# Custom
+config.json
+api-log
