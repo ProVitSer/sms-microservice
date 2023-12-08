@@ -1,33 +1,31 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/config.provider';
-import { MongooseModule } from '@nestjs/mongoose';
-import { getMongoUseFactory } from './config/mongo.config';
-import { SmsConfigModule } from './sms-config/sms-config.module';
-import { CacheModule } from './cache/cache.module';
-import { HttpRequestModule } from './http-request/http.module';
-import { AppLoggerModule } from './app-logger/app-logger.module';
-import { RabbitModule } from './rabbit/rabbit.module';
-import { SmsModule } from './sms/sms.module';
-import { SmsjobModule } from './sms-job/sms-job.module';
-import { SmsApiModule } from './sms-api/sms-api.module';
+import { ConfigModule } from '@nestjs/config';
+import { SmsConfigModule } from './sms-client-config/sms-client-config.module';
+import { SmsSchedulerModule } from './sms-scheduler/sms-scheduler.module';
+import { SmsProviderModule } from './sms-provider/sms-provider.module';
+import { SmsMessageModule } from './sms-message/sms-message.module';
+import { TypeOrmConfigModule } from './configs/typeorm-config/typeorm-config.module';
+import { appConfig, appConfigSchema } from './configs/app.config';
+import config from './configs/env.config';
+import { typeOrmConfigSchema, typeormConfig } from './configs/typeorm-config/typeorm-config';
+import { rmqMicroserviceConfig, rmqMicroserviceConfigSchema } from './configs/rmq-microservice.config';
 
 @Module({
     imports: [
-        ConfigModule.forRoot({ load: [configuration] }),
-        MongooseModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: getMongoUseFactory,
-            inject: [ConfigService],
-        }),
-        SmsModule,
-        SmsjobModule,
-        SmsApiModule,
+        ConfigModule.forRoot({
+            envFilePath: config(),
+            isGlobal: true,
+            load: [appConfig, typeormConfig, rmqMicroserviceConfig],
+            validationSchema: appConfigSchema
+              .concat(typeOrmConfigSchema)
+              .concat(rmqMicroserviceConfigSchema),
+            validationOptions: { abortEarly: true },
+          }),
+        TypeOrmConfigModule,
         SmsConfigModule,
-        CacheModule,
-        HttpRequestModule,
-        AppLoggerModule,
-        RabbitModule,
+        SmsSchedulerModule,
+        SmsProviderModule,
+        SmsMessageModule
     ],
     controllers: [],
     providers: [],

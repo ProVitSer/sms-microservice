@@ -401,5 +401,9 @@ dist
 
 
 # Custom
-config.json
+# Custom
+config.dev.json
+config.prod.json
 api-log
+.env.dev
+.env.prod
