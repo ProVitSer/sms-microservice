@@ -7,6 +7,6 @@ export const rmqMicroserviceConfigSchema = Joi.object({
 });
 
 export const rmqMicroserviceConfig = registerAs('rmq', () => ({
-  url: process.env.RMQ_URL,
-  queue: process.env.SMS_SERVICE_QUEUE,
+    url: process.env.RMQ_URL,
+    queue: process.env.SMS_SERVICE_QUEUE,
 }));

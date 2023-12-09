@@ -4,7 +4,6 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger } from '@nestjs/common';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
-
 async function bootstrap() {
     initializeTransactionalContext();
 
@@ -16,8 +15,6 @@ async function bootstrap() {
             queueOptions: { durable: false },
         },
     });
-
-
 
     app.listen().then(() => Logger.log('User microservice start and listening on RabbitMQ'));
 }

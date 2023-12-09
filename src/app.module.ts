@@ -16,16 +16,14 @@ import { rmqMicroserviceConfig, rmqMicroserviceConfigSchema } from './configs/rm
             envFilePath: config(),
             isGlobal: true,
             load: [appConfig, typeormConfig, rmqMicroserviceConfig],
-            validationSchema: appConfigSchema
-              .concat(typeOrmConfigSchema)
-              .concat(rmqMicroserviceConfigSchema),
+            validationSchema: appConfigSchema.concat(typeOrmConfigSchema).concat(rmqMicroserviceConfigSchema),
             validationOptions: { abortEarly: true },
-          }),
+        }),
         TypeOrmConfigModule,
         SmsConfigModule,
         SmsSchedulerModule,
         SmsProviderModule,
-        SmsMessageModule
+        SmsMessageModule,
     ],
     controllers: [],
     providers: [],

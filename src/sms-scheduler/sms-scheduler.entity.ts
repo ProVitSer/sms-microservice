@@ -3,24 +3,24 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class SmsSchedulerEntity {
-  @PrimaryGeneratedColumn()
-  scheduled_id: number;
+    @PrimaryGeneratedColumn()
+    scheduled_id: number;
 
-  @Column()
-  scheduled_text: string;
+    @Column()
+    scheduled_text: string;
 
-  @Column()
-  scheduled_time: Date;
+    @Column()
+    scheduled_time: Date;
 
-  @Column()
-  scheduled_date: Date;
+    @Column()
+    scheduled_date: Date;
 
-  @Column()
-  status: string;
+    @Column()
+    status: string;
 
-  @Column()
-  timestamp: Date;
+    @Column()
+    timestamp: Date;
 
-  @ManyToOne(() => SmsClientConfigEntity, client => client.smsSchedulerList)
-  client: SmsClientConfigEntity;
+    @ManyToOne(() => SmsClientConfigEntity, (client) => client.smsSchedulerList)
+    client: SmsClientConfigEntity;
 }
