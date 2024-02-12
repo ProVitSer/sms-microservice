@@ -1,26 +1,24 @@
+import { CommonEntity } from '@app/common/entities';
 import { SmsMessageEntity } from '@app/sms-message/sms-message.entity';
 import { SmsSchedulerEntity } from '@app/sms-scheduler/sms-scheduler.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 
-@Entity()
-export class SmsClientConfigEntity {
-    @PrimaryGeneratedColumn()
-    client_id: number;
-
-    @Column()
-    client_name: string;
+@Entity('sms-client-config')
+export class SmsClientConfigEntity extends CommonEntity {
+    @Column('varchar', { unique: true })
+    clientId: string;
 
     @Column()
-    sms_service_provider: string;
+    smsServiceProvider: string;
 
-    @Column()
+    @Column('varchar', { nullable: true })
     login: string;
 
-    @Column()
+    @Column('varchar', { nullable: true })
     password: string;
 
-    @Column()
-    api_key: string;
+    @Column('varchar', { nullable: true })
+    apiKey: string;
 
     @OneToMany(() => SmsMessageEntity, (smsMessage) => smsMessage.client)
     smsMessages: SmsMessageEntity[];

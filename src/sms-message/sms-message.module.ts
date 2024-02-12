@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SmsMessageEntity } from './sms-message.entity';
 
 @Module({
-    imports: [ TypeOrmModule.forFeature([SmsMessageEntity])],
+    imports: [TypeOrmModule.forFeature([])],
     controllers: [],
     providers: [],
     exports: [],

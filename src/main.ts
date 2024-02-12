@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger } from '@nestjs/common';
 import { initializeTransactionalContext } from 'typeorm-transactional';
+import { GlobalValidationPipe } from './common/pipes/global-validation.pipe';
 
 async function bootstrap() {
     initializeTransactionalContext();
@@ -15,6 +16,8 @@ async function bootstrap() {
             queueOptions: { durable: false },
         },
     });
+
+    app.useGlobalPipes(new GlobalValidationPipe());
 
     app.listen().then(() => Logger.log('User microservice start and listening on RabbitMQ'));
 }
